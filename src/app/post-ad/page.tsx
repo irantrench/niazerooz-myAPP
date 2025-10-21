@@ -30,6 +30,7 @@ import { Progress } from '@/components/ui/progress';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from '@/hooks/use-toast';
 import CategoryBrowser from '@/components/category-browser';
+import { cn } from '@/lib/utils';
 
 const adSchema = z.object({
   category: z.string().min(1, 'انتخاب دسته‌بندی الزامی است.'),
@@ -53,7 +54,6 @@ const steps = [
 export default function PostAdPage() {
   const [currentStep, setCurrentStep] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState('');
   
   const form = useForm<AdFormValues>({
     resolver: zodResolver(adSchema),
@@ -65,21 +65,31 @@ export default function PostAdPage() {
       price: '',
       image: '',
     },
+    mode: 'onChange'
   });
+
+  const selectedCategory = form.watch('category');
+
+  const handleCategorySelect = (categoryName: string) => {
+    form.setValue('category', categoryName, { shouldValidate: true, shouldDirty: true });
+  }
 
   const handleNext = async () => {
     let isValid = false;
     switch (currentStep) {
       case 0:
-        isValid = selectedCategory !== '';
-        if(isValid) form.setValue('category', selectedCategory);
-        else toast({ variant: 'destructive', title: 'لطفا یک دسته‌بندی انتخاب کنید.' });
+        isValid = await form.trigger('category');
+        if(!isValid) toast({ variant: 'destructive', title: 'لطفا یک دسته‌بندی انتخاب کنید.' });
         break;
       case 1:
         isValid = await form.trigger(['title', 'description']);
         break;
       case 2:
         isValid = await form.trigger(['priceType', 'price']);
+        if (form.getValues('priceType') === 'fixed' && !form.getValues('price')) {
+          form.setError('price', { type: 'manual', message: 'وارد کردن قیمت الزامی است.' });
+          isValid = false;
+        }
         break;
       case 3:
         isValid = true; // Image upload is optional
@@ -108,7 +118,7 @@ export default function PostAdPage() {
     setCurrentStep(steps.length - 1); // Go to finish step
   };
   
-  const progress = ((currentStep) / (steps.length - 2)) * 100;
+  const progress = ((currentStep + 1) / (steps.length )) * 100;
 
   return (
     <div className="container mx-auto py-8">
@@ -132,11 +142,20 @@ export default function PostAdPage() {
                      const categoryElement = target.closest('.group');
                      if(categoryElement){
                        const categoryName = categoryElement.querySelector('span')?.textContent;
-                       if(categoryName) setSelectedCategory(categoryName);
+                       if(categoryName) handleCategorySelect(categoryName);
                      }
                    }}>
                     <CategoryBrowser selectedCategory={selectedCategory} />
                    </div>
+                   <FormField
+                      control={form.control}
+                      name="category"
+                      render={() => (
+                        <FormItem>
+                          <FormMessage className="text-center pt-4" />
+                        </FormItem>
+                      )}
+                    />
                 </div>
               )}
 
@@ -251,7 +270,10 @@ export default function PostAdPage() {
                     <h2 className="text-2xl font-bold mb-2">آگهی شما با موفقیت ثبت شد!</h2>
                     <p className="text-muted-foreground mb-6">آگهی شما پس از تایید توسط مدیران، در سایت نمایش داده خواهد شد.</p>
                     <div className="flex gap-4 justify-center">
-                        <Button onClick={() => setCurrentStep(0)}>ثبت آگهی جدید</Button>
+                        <Button onClick={() => {
+                          form.reset();
+                          setCurrentStep(0);
+                        }}>ثبت آگهی جدید</Button>
                         <Button variant="outline">مشاهده آگهی‌های من</Button>
                     </div>
                 </div>
