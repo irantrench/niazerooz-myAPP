@@ -59,7 +59,7 @@ export default function Header() {
       <div className="container flex h-20 items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <Image
-            src="https://static.niazerooz.com/content/images/logo/new/niazerooz-com-logo-light.png"
+            src="https://www.niazerooz.com/Content/images/logo/new/niazerooz-com-logo-light.png"
             alt="Niazerooz Logo"
             width={100}
             height={40}
