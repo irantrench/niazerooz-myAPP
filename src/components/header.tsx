@@ -54,7 +54,7 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur-sm">
+    <header className="sticky top-0 z-40 w-full border-b bg-background/70 backdrop-blur-lg">
       <div className="container flex h-20 items-center justify-between gap-4">
         <div className="flex-shrink-0">
           <Image
@@ -71,7 +71,7 @@ export default function Header() {
             <input
               type="search"
               placeholder="جستجو در همه آگهی ها..."
-              className="w-full rounded-full border-2 border-input bg-card py-2 pr-10 pl-4 h-12 text-base focus:outline-none focus:ring-2 focus:ring-primary/50 shadow-inner"
+              className="w-full rounded-full border-2 border-input bg-card/50 py-2 pr-10 pl-4 h-12 text-base focus:outline-none focus:ring-2 focus:ring-primary/50 shadow-inner"
               value={query}
               onChange={handleInputChange}
               onFocus={() => setShowSuggestions(true)}
@@ -79,7 +79,7 @@ export default function Header() {
             {loading && <Loader2 className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 animate-spin text-muted-foreground" />}
           </div>
           {showSuggestions && (suggestions.length > 0 || loading) && (
-            <div className="absolute top-full mt-2 w-full rounded-md border bg-popover shadow-lg z-50 glassmorphic">
+            <div className="absolute top-full mt-2 w-full rounded-md border bg-popover/80 backdrop-blur-xl shadow-lg z-50">
               <div className="p-2">
                 <div className="flex items-center gap-2 text-sm font-semibold text-muted-foreground mb-2 px-2">
                   <Tags className="h-4 w-4" />
