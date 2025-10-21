@@ -1,10 +1,11 @@
 "use client";
 
-import { Search, Tags, SlidersHorizontal, Loader2 } from "lucide-react";
+import { Search, Tags, SlidersHorizontal, Loader2, MapPin } from "lucide-react";
 import Image from "next/image";
 import { useState, useEffect, useRef } from 'react';
 import { suggestCategories } from "@/ai/ai-category-suggestions";
 import { Button } from "./ui/button";
+import Link from "next/link";
 
 export default function Header() {
   const [query, setQuery] = useState("");
@@ -56,7 +57,7 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/70 backdrop-blur-lg">
       <div className="container flex h-20 items-center justify-between gap-4">
-        <div className="flex-shrink-0">
+        <div className="flex items-center gap-4">
           <Image
             src="https://static.niazerooz.com/content/images/logo/new/niazerooz-com-logo-light.png"
             alt="Niazerooz Logo"
@@ -64,6 +65,12 @@ export default function Header() {
             height={40}
             className="h-10 w-auto object-contain"
           />
+           <Link href="/city">
+             <Button variant="ghost" size="sm" className="hidden sm:flex text-muted-foreground">
+                <MapPin className="ml-2 h-4 w-4" />
+                تهران
+              </Button>
+           </Link>
         </div>
         <div className="flex-grow relative" ref={suggestionBoxRef}>
           <div className="relative">

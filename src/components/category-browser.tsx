@@ -17,6 +17,7 @@ import {
   HandshakeIcon,
 } from './svg-icons';
 import { cn } from '@/lib/utils';
+import Link from 'next/link';
 
 const categories = [
   { name: "املاک", icon: HouseBuildingIcon, href: "/listings?category=real-estate" },
@@ -52,12 +53,9 @@ export default function CategoryBrowser({ selectedCategory, isSelectable = false
           {categories.map((category) => {
             const Icon = category.icon;
             const isSelected = selectedCategory === category.name;
-            const Wrapper = 'div';
-            const props = {};
-
-            return (
-              <Wrapper key={category.name} {...props} className="group cursor-pointer">
-                  <div className={cn(
+            
+            const content = (
+               <div className={cn(
                       "flex flex-col items-center justify-start p-2 gap-2 text-center h-full rounded-lg transition-colors duration-200",
                       isSelected && "bg-primary/20"
                     )}>
@@ -72,7 +70,20 @@ export default function CategoryBrowser({ selectedCategory, isSelectable = false
                     </div>
                     <span className="font-body text-sm text-center">{category.name}</span>
                   </div>
-              </Wrapper>
+            );
+            
+            if (isSelectable) {
+              return (
+                <div key={category.name} className="group cursor-pointer">
+                  {content}
+                </div>
+              );
+            }
+
+            return (
+              <Link href={category.href} key={category.name} className="group cursor-pointer">
+                {content}
+              </Link>
             );
           })}
         </div>
