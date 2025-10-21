@@ -105,7 +105,7 @@ export default function PostAdPage() {
 
   const handleBack = () => {
     if (currentStep > 0) {
-      setCurrentStep((prev) => prev - 1);
+      setCurrentStep((prev) => prev + 1);
     }
   };
   
@@ -118,7 +118,7 @@ export default function PostAdPage() {
     setCurrentStep(steps.length - 1); // Go to finish step
   };
   
-  const progress = ((currentStep + 1) / (steps.length )) * 100;
+  const progress = ((currentStep) / (steps.length -1 )) * 100;
 
   return (
     <div className="container mx-auto py-8">
@@ -145,7 +145,7 @@ export default function PostAdPage() {
                        if(categoryName) handleCategorySelect(categoryName);
                      }
                    }}>
-                    <CategoryBrowser selectedCategory={selectedCategory} />
+                    <CategoryBrowser selectedCategory={selectedCategory} isSelectable={true} />
                    </div>
                    <FormField
                       control={form.control}
@@ -279,7 +279,7 @@ export default function PostAdPage() {
                 </div>
               )}
 
-              {currentStep < steps.length - 2 && (
+              {currentStep < steps.length - 1 && (
                 <div className="flex justify-between items-center pt-8">
                   <Button type="button" variant="outline" onClick={handleBack} disabled={currentStep === 0}>
                     <ArrowRight className="ml-2 h-4 w-4" />
@@ -319,4 +319,3 @@ export default function PostAdPage() {
     </div>
   );
 }
-    
