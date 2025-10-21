@@ -57,10 +57,12 @@ export default function MyAdsPage() {
     <div className="container mx-auto py-10">
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-2xl font-bold font-headline">مدیریت آگهی‌های من</h1>
-        <Button>
-          <PlusCircle className="ml-2 h-4 w-4" />
-          آگهی جدید
-        </Button>
+        <Link href="/post-ad">
+            <Button>
+            <PlusCircle className="ml-2 h-4 w-4" />
+            آگهی جدید
+            </Button>
+        </Link>
       </div>
 
       <Card>
@@ -98,6 +100,7 @@ export default function MyAdsPage() {
                       height="64"
                       src={ad.image}
                       width="64"
+                      data-ai-hint="ad image"
                     />
                   </TableCell>
                   <TableCell className="font-medium">{ad.title}</TableCell>
