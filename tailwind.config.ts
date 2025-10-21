@@ -10,15 +10,15 @@ export default {
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+      padding: "1rem",
       screens: {
         "2xl": "1400px",
       },
     },
     extend: {
       fontFamily: {
-        body: ['PT Sans', 'sans-serif'],
-        headline: ['Poppins', 'sans-serif'],
+        body: ['Vazirmatn', 'sans-serif'],
+        headline: ['Vazirmatn', 'sans-serif'],
         code: ['monospace'],
       },
       colors: {

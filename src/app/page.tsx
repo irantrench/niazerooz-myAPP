@@ -1,19 +1,17 @@
 import Header from '@/components/header';
-import Footer from '@/components/footer';
-import HeroSearch from '@/components/hero-search';
+import Hero from '@/components/hero';
 import CategoryBrowser from '@/components/category-browser';
-import Listings from '@/components/listings';
+import VipAd from '@/components/vip-ad';
 
 export default function Home() {
   return (
     <>
       <Header />
-      <HeroSearch />
-      <main>
+      <main className="container px-4">
+        <Hero />
+        <VipAd />
         <CategoryBrowser />
-        <Listings />
       </main>
-      <Footer />
     </>
   );
 }
