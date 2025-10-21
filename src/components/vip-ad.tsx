@@ -6,7 +6,7 @@ export default function VipAd() {
   return (
     <div className="relative bg-card gradient-border rounded-2xl shadow-deep overflow-hidden my-8 p-4 animate-subtle-float">
        <div className="absolute top-0 right-0">
-         <div className="absolute transform rotate-45 bg-accent text-center text-accent-foreground font-semibold py-1 right-[-34px] top-[18px] w-[120px] shadow-lg">
+         <div className="absolute transform rotate-45 bg-accent text-accent-foreground font-semibold py-1 right-[-34px] top-[18px] w-[120px] shadow-lg">
             VIP
           </div>
       </div>

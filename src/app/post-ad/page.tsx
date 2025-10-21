@@ -105,7 +105,7 @@ export default function PostAdPage() {
 
   const handleBack = () => {
     if (currentStep > 0) {
-      setCurrentStep((prev) => prev + 1);
+      setCurrentStep((prev) => prev - 1);
     }
   };
   
@@ -118,7 +118,7 @@ export default function PostAdPage() {
     setCurrentStep(steps.length - 1); // Go to finish step
   };
   
-  const progress = ((currentStep) / (steps.length -1 )) * 100;
+  const progress = ((currentStep) / (steps.length - 2)) * 100;
 
   return (
     <div className="container mx-auto py-8">
@@ -279,24 +279,22 @@ export default function PostAdPage() {
                 </div>
               )}
 
-              {currentStep < steps.length - 1 && (
-                <div className="flex justify-between items-center pt-8">
-                  <Button type="button" variant="outline" onClick={handleBack} disabled={currentStep === 0}>
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                    بازگشت
-                  </Button>
-                  <Button type="button" onClick={handleNext}>
-                    ادامه
-                    <ArrowLeft className="mr-2 h-4 w-4" />
-                  </Button>
-                </div>
-              )}
-               {currentStep === steps.length - 2 && (
-                 <div className="flex justify-between items-center pt-8">
-                   <Button type="button" variant="outline" onClick={handleBack}>
-                     <ArrowRight className="ml-2 h-4 w-4" />
-                     بازگشت
-                   </Button>
+              <div className="flex justify-between items-center pt-8">
+                  {currentStep < steps.length - 1 && (
+                    <Button type="button" variant="outline" onClick={handleBack} disabled={currentStep === 0}>
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                      بازگشت
+                    </Button>
+                  )}
+
+                  {currentStep < steps.length - 2 && (
+                    <Button type="button" onClick={handleNext}>
+                      ادامه
+                      <ArrowLeft className="mr-2 h-4 w-4" />
+                    </Button>
+                  )}
+
+                  {currentStep === steps.length - 2 && (
                    <Button type="submit" disabled={isLoading}>
                       {isLoading ? (
                         <>
@@ -310,8 +308,8 @@ export default function PostAdPage() {
                         </>
                       )}
                    </Button>
-                 </div>
-               )}
+                  )}
+              </div>
             </form>
           </Form>
         </CardContent>
