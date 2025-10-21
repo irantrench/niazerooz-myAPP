@@ -9,13 +9,13 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main className="container px-4">
+      <div className="container px-4">
         <HeroSlider />
         <VipAd />
         <CategoryBrowser />
         <HomeFeatures />
         <HomeServices />
-      </main>
+      </div>
     </>
   );
 }

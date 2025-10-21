@@ -33,9 +33,9 @@ export default function RootLayout({
     <html lang="fa" dir="rtl" className={`${poppins.variable} ${ptSans.variable} scroll-smooth`}>
       <body className="font-body bg-background antialiased">
         <div className="flex flex-col min-h-screen">
-          <div className="flex-grow pb-20">
+          <main className="flex-grow pb-20">
             {children}
-          </div>
+          </main>
           <Toaster />
           <BottomNav />
         </div>
