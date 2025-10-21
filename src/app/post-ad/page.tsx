@@ -228,7 +228,7 @@ export default function PostAdPage() {
     }
   };
 
-  const progress = ((currentStep) / (steps.length - 2)) * 100;
+  const progress = ((currentStep) / (steps.length - 2)) * 100
 
   return (
     <div className="container mx-auto py-8">
