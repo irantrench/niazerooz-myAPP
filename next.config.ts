@@ -40,6 +40,18 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'static.niazerooz.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdnnr.niazerooz.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
 };
