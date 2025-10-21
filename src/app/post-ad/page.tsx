@@ -1,11 +1,11 @@
 
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { ArrowLeft, ArrowRight, Camera, Check, DollarSign, List, FileText, Loader2, Upload, Video, X, MapPin } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Camera, Check, DollarSign, List, FileText, Loader2, Upload, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -18,21 +18,13 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Progress } from '@/components/ui/progress';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import CategoryBrowser from '@/components/category-browser';
-import { cn } from '@/lib/utils';
 import Image from 'next/image';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import Link from 'next/link';
 
 const adSchema = z.object({
   category: z.string().min(1, 'انتخاب دسته‌بندی الزامی است.'),
@@ -41,10 +33,6 @@ const adSchema = z.object({
   priceType: z.enum(['fixed', 'negotiable', 'free']),
   price: z.string().optional(),
   images: z.array(z.string()).optional(),
-  location: z.object({
-    latitude: z.number(),
-    longitude: z.number(),
-  }).optional(),
 });
 
 type AdFormValues = z.infer<typeof adSchema>;
@@ -53,19 +41,15 @@ const steps = [
   { id: 'category', title: 'انتخاب دسته‌بندی', icon: List },
   { id: 'details', title: 'جزئیات آگهی', icon: FileText },
   { id: 'pricing', title: 'قیمت‌گذاری', icon: DollarSign },
-  { id: 'media', title: 'تصاویر و موقعیت', icon: Camera },
+  { id: 'media', title: 'تصاویر', icon: Camera },
   { id: 'finish', title: 'پایان', icon: Check },
 ];
 
 export default function PostAdPage() {
   const [currentStep, setCurrentStep] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
-  const [location, setLocation] = useState<AdFormValues['location']>();
-
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
@@ -81,41 +65,6 @@ export default function PostAdPage() {
     },
     mode: 'onChange'
   });
-
-  useEffect(() => {
-    if (currentStep === 3) { // Media step
-      const getCameraPermission = async () => {
-        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-           setHasCameraPermission(false);
-           return;
-        }
-        try {
-          const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-          setHasCameraPermission(true);
-          if (videoRef.current) {
-            videoRef.current.srcObject = stream;
-          }
-        } catch (error) {
-          console.error('Error accessing camera:', error);
-          setHasCameraPermission(false);
-          toast({
-            variant: 'destructive',
-            title: 'عدم دسترسی به دوربین',
-            description: 'برای استفاده از دوربین، لطفاً در تنظیمات مرورگر خود دسترسی لازم را بدهید.',
-          });
-        }
-      };
-      getCameraPermission();
-      
-      // Cleanup function to stop video stream
-      return () => {
-        if (videoRef.current && videoRef.current.srcObject) {
-          const stream = videoRef.current.srcObject as MediaStream;
-          stream.getTracks().forEach(track => track.stop());
-        }
-      }
-    }
-  }, [currentStep, toast]);
 
   const selectedCategory = form.watch('category');
 
@@ -142,7 +91,6 @@ export default function PostAdPage() {
         break;
       case 3:
         form.setValue('images', uploadedImages);
-        form.setValue('location', location);
         isValid = true; // Media is optional
         break;
     }
@@ -166,23 +114,6 @@ export default function PostAdPage() {
     await new Promise(resolve => setTimeout(resolve, 2000));
     setIsLoading(false);
     setCurrentStep(steps.length - 1);
-  };
-  
-  const handleCapture = () => {
-    if (videoRef.current && canvasRef.current) {
-      const video = videoRef.current;
-      const canvas = canvasRef.current;
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      const context = canvas.getContext('2d');
-      context?.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-      const dataUrl = canvas.toDataURL('image/png');
-      if (uploadedImages.length < 8) {
-        setUploadedImages([...uploadedImages, dataUrl]);
-      } else {
-        toast({ variant: 'destructive', title: 'محدودیت تعداد تصاویر', description: 'شما به حداکثر تعداد تصاویر (۸) رسیده‌اید.' });
-      }
-    }
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -212,23 +143,7 @@ export default function PostAdPage() {
     setUploadedImages(uploadedImages.filter((_, i) => i !== index));
   };
 
-  const handleLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        const { latitude, longitude } = position.coords;
-        setLocation({ latitude, longitude });
-        console.log("Location found:", { latitude, longitude });
-        toast({ title: 'موقعیت مکانی یافت شد', description: `موقعیت شما با موفقیت ثبت شد.` });
-      }, (error) => {
-        console.error("Geolocation error:", error);
-        toast({ variant: 'destructive', title: 'خطا در یافتن موقعیت', description: 'لطفاً دسترسی به موقعیت مکانی را فعال کنید.' });
-      });
-    } else {
-       toast({ variant: 'destructive', title: 'موقعیت مکانی پشتیبانی نمی‌شود', description: 'مرورگر شما از قابلیت موقعیت مکانی پشتیبانی نمی‌کند.' });
-    }
-  };
-
-  const progress = ((currentStep) / (steps.length - 2)) * 100
+  const progress = ((currentStep) / (steps.length - 2)) * 100;
 
   return (
     <div className="container mx-auto py-8">
@@ -363,40 +278,17 @@ export default function PostAdPage() {
               
               {currentStep === 3 && (
                 <div className="space-y-6 animate-in fade-in-50">
-                  {hasCameraPermission === false && (
-                    <Alert variant="destructive">
-                      <Video className="h-4 w-4" />
-                      <AlertTitle>دسترسی به دوربین لازم است</AlertTitle>
-                      <AlertDescription>
-                        برای گرفتن عکس زنده، لطفاً دسترسی به دوربین را در مرورگر خود فعال کنید.
-                      </AlertDescription>
-                    </Alert>
-                  )}
-                  
-                  <div className="relative w-full aspect-video bg-muted rounded-lg overflow-hidden flex items-center justify-center">
-                    <video ref={videoRef} className="w-full h-full object-cover" autoPlay muted playsInline />
-                    <canvas ref={canvasRef} className="hidden"></canvas>
-                    {hasCameraPermission !== true && <Camera className="w-16 h-16 text-muted-foreground" />}
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Button type="button" onClick={handleCapture} disabled={!hasCameraPermission}>
-                      <Camera className="ml-2" />
-                      گرفتن عکس
-                    </Button>
-                    <Button type="button" variant="outline" onClick={() => fileInputRef.current?.click()}>
-                      <Upload className="ml-2" />
-                      انتخاب فایل از گالری
-                    </Button>
-                    <input 
-                      type="file" 
-                      ref={fileInputRef} 
-                      className="hidden" 
-                      accept="image/*" 
-                      multiple
-                      onChange={handleFileChange}
-                    />
-                  </div>
+                    <FormLabel>تصاویر آگهی (حداکثر ۸ تصویر)</FormLabel>
+                     <div className="flex items-center justify-center w-full">
+                        <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed rounded-lg cursor-pointer bg-muted/50 hover:bg-muted">
+                            <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                <Upload className="w-10 h-10 mb-3 text-muted-foreground" />
+                                <p className="mb-2 text-sm text-muted-foreground"><span className="font-semibold">برای انتخاب فایل کلیک کنید</span> یا فایل‌ها را به اینجا بکشید</p>
+                                <p className="text-xs text-muted-foreground">PNG, JPG, GIF (حداکثر 5 مگابایت)</p>
+                            </div>
+                            <input id="dropzone-file" type="file" className="hidden" ref={fileInputRef} accept="image/*" multiple onChange={handleFileChange} />
+                        </label>
+                    </div> 
 
                   {uploadedImages.length > 0 && (
                     <div>
@@ -419,24 +311,6 @@ export default function PostAdPage() {
                       </div>
                     </div>
                   )}
-
-                  <div className="border-t pt-6">
-                     <FormLabel>موقعیت مکانی (اختیاری)</FormLabel>
-                     <div className="flex items-center gap-4 mt-2">
-                        <Button type="button" variant="outline" onClick={handleLocation} className="w-full">
-                           <MapPin className="ml-2"/>
-                           {location ? 'موقعیت مکانی ثبت شد' : 'افزودن موقعیت مکانی فعلی'}
-                        </Button>
-                        {location && (
-                           <p className="text-xs text-muted-foreground" dir="ltr">
-                              {location.latitude.toFixed(4)}, {location.longitude.toFixed(4)}
-                           </p>
-                        )}
-                     </div>
-                     <FormDescription className="mt-2">
-                        ثبت موقعیت مکانی دقیق، به کاربران کمک می‌کند آگهی شما را راحت‌تر پیدا کنند.
-                     </FormDescription>
-                  </div>
                 </div>
               )}
 
@@ -449,7 +323,6 @@ export default function PostAdPage() {
                         <Button onClick={() => {
                           form.reset();
                           setUploadedImages([]);
-                          setLocation(undefined);
                           setCurrentStep(0);
                         }}>ثبت آگهی جدید</Button>
                         <Link href="/my-ads">
@@ -501,3 +374,5 @@ export default function PostAdPage() {
     </div>
   );
 }
+
+    
