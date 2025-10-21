@@ -54,15 +54,24 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between gap-4">
+    <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur-sm">
+      <div className="container flex h-20 items-center justify-between gap-4">
+        <div className="flex-shrink-0">
+          <Image
+            src="https://static.niazerooz.com/content/images/logo/new/niazerooz-com-logo.png"
+            alt="Niazerooz Logo"
+            width={100}
+            height={40}
+            className="h-10 w-auto object-contain"
+          />
+        </div>
         <div className="flex-grow relative" ref={suggestionBoxRef}>
           <div className="relative">
             <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             <input
               type="search"
               placeholder="جستجو در آگهی ها"
-              className="w-full rounded-md border bg-muted/50 py-2 pr-10 pl-4 h-10 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+              className="w-full rounded-full border-2 border-gray-200 bg-white py-2 pr-10 pl-4 h-12 text-base focus:outline-none focus:ring-2 focus:ring-primary/50"
               value={query}
               onChange={handleInputChange}
               onFocus={() => setShowSuggestions(true)}
@@ -97,15 +106,6 @@ export default function Header() {
               </div>
             </div>
           )}
-        </div>
-        <div className="flex-shrink-0">
-          <Image
-            src="https://www.niazerooz.com/images/logo-v2.png"
-            alt="Niazerooz Logo"
-            width={100}
-            height={40}
-            className="h-8 w-auto object-contain"
-          />
         </div>
       </div>
     </header>
