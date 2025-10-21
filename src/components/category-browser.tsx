@@ -17,7 +17,6 @@ import {
   HandshakeIcon,
 } from './svg-icons';
 import { cn } from '@/lib/utils';
-import Link from 'next/link';
 
 const categories = [
   { name: "املاک", icon: HouseBuildingIcon, href: "/listings?category=real-estate" },
@@ -53,8 +52,8 @@ export default function CategoryBrowser({ selectedCategory, isSelectable = false
           {categories.map((category) => {
             const Icon = category.icon;
             const isSelected = selectedCategory === category.name;
-            const Wrapper = isSelectable ? 'div' : Link;
-            const props = isSelectable ? {} : { href: category.href };
+            const Wrapper = 'div';
+            const props = {};
 
             return (
               <Wrapper key={category.name} {...props} className="group cursor-pointer">
