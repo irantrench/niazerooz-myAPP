@@ -1,3 +1,4 @@
+
 import Link from 'next/link';
 import {
   HouseBuildingIcon,
@@ -16,27 +17,31 @@ import {
   ScrewdriverWrenchIcon,
   HandshakeIcon,
 } from './svg-icons';
+import { cn } from '@/lib/utils';
 
 const categories = [
-  { name: "املاک", icon: HouseBuildingIcon, href: "#" },
-  { name: "وسایل نقلیه", icon: CarSideIcon, href: "#" },
-  { name: "خدمات مسافرتی", icon: PersonWalkingLuggageIcon, href: "#" },
-  { name: "خدمات ساختمانی", icon: ApartmentIcon, href: "#" },
-  { name: "کشاورزی و دامداری", icon: WheatIcon, href: "#" },
-  { name: "صنعت", icon: GearsIcon, href: "#" },
-  { name: "آموزش", icon: GraduationCapIcon, href: "#" },
-  { name: "پزشکی و سلامت", icon: StethoscopeIcon, href: "#" },
-  { name: "کامپیوتر", icon: ComputerIcon, href: "#" },
-  { name: "لوازم", icon: LampIcon, href: "#" },
-  { name: "حیوانات خانگی", icon: DogIcon, href: "#" },
-  { name: "کار و استخدام", icon: BriefcaseIcon, href: "#" },
-  { name: "موبایل", icon: MobileNotchIcon, href: "#" },
-  { name: "خدمات", icon: ScrewdriverWrenchIcon, href: "#" },
-  { name: "بازرگانی", icon: HandshakeIcon, href: "#" },
+  { name: "املاک", icon: HouseBuildingIcon, href: "/listings?category=real-estate" },
+  { name: "وسایل نقلیه", icon: CarSideIcon, href: "/listings?category=vehicles" },
+  { name: "خدمات مسافرتی", icon: PersonWalkingLuggageIcon, href: "/listings?category=travel" },
+  { name: "خدمات ساختمانی", icon: ApartmentIcon, href: "/listings?category=building" },
+  { name: "کشاورزی و دامداری", icon: WheatIcon, href: "/listings?category=agriculture" },
+  { name: "صنعت", icon: GearsIcon, href: "/listings?category=industry" },
+  { name: "آموزش", icon: GraduationCapIcon, href: "/listings?category=education" },
+  { name: "پزشکی و سلامت", icon: StethoscopeIcon, href: "/listings?category=health" },
+  { name: "کامپیوتر", icon: ComputerIcon, href: "/listings?category=computer" },
+  { name: "لوازم", icon: LampIcon, href: "/listings?category=appliances" },
+  { name: "حیوانات خانگی", icon: DogIcon, href: "/listings?category=pets" },
+  { name: "کار و استخدام", icon: BriefcaseIcon, href: "/listings?category=jobs" },
+  { name: "موبایل", icon: MobileNotchIcon, href: "/listings?category=mobile" },
+  { name: "خدمات", icon: ScrewdriverWrenchIcon, href: "/listings?category=services" },
+  { name: "بازرگانی", icon: HandshakeIcon, href: "/listings?category=business" },
 ];
 
+interface CategoryBrowserProps {
+  selectedCategory?: string;
+}
 
-export default function CategoryBrowser() {
+export default function CategoryBrowser({ selectedCategory }: CategoryBrowserProps) {
   return (
     <section className="my-8">
       <div className="bg-card p-4 rounded-2xl shadow-md">
@@ -46,11 +51,21 @@ export default function CategoryBrowser() {
         <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-8 gap-4">
           {categories.map((category) => {
             const Icon = category.icon;
+            const isSelected = selectedCategory === category.name;
             return (
               <Link href={category.href} key={category.name} className="group">
-                  <div className="flex flex-col items-center justify-start p-2 gap-2 text-center h-full">
-                    <div className="bg-gray-100 dark:bg-gray-800 p-3.5 rounded-full group-hover:bg-primary/10 transition-colors duration-200">
-                       <Icon className="h-7 w-7 text-gray-700 dark:text-gray-400 group-hover:text-primary" />
+                  <div className={cn(
+                      "flex flex-col items-center justify-start p-2 gap-2 text-center h-full rounded-lg transition-colors duration-200",
+                      isSelected && "bg-primary/20"
+                    )}>
+                    <div className={cn(
+                      "bg-gray-100 dark:bg-gray-800 p-3.5 rounded-full group-hover:bg-primary/10 transition-colors duration-200",
+                      isSelected && "bg-primary/30"
+                      )}>
+                       <Icon className={cn(
+                         "h-7 w-7 text-gray-700 dark:text-gray-400 group-hover:text-primary",
+                         isSelected && "text-primary"
+                        )} />
                     </div>
                     <span className="font-body text-sm text-center">{category.name}</span>
                   </div>
@@ -62,3 +77,5 @@ export default function CategoryBrowser() {
     </section>
   );
 }
+
+    
