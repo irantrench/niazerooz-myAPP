@@ -31,7 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fa" dir="rtl" className={`${poppins.variable} ${ptSans.variable} scroll-smooth`}>
-      <body className="font-body bg-background antialiased">
+      <body className="font-body bg-background antialiased aurora-background">
         <div className="flex flex-col min-h-screen">
           <main className="flex-grow pb-20">
             {children}
