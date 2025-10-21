@@ -58,7 +58,7 @@ export default function Header() {
       <div className="container flex h-20 items-center justify-between gap-4">
         <div className="flex-shrink-0">
           <Image
-            src="https://static.niazerooz.com/content/images/logo/new/niazerooz-com-logo.png"
+            src="https://static.niazerooz.com/content/images/logo/new/niazerooz-com-logo-light.png"
             alt="Niazerooz Logo"
             width={100}
             height={40}
@@ -70,8 +70,8 @@ export default function Header() {
             <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             <input
               type="search"
-              placeholder="جستجو در آگهی ها"
-              className="w-full rounded-full border-2 border-gray-200 bg-white py-2 pr-10 pl-4 h-12 text-base focus:outline-none focus:ring-2 focus:ring-primary/50"
+              placeholder="جستجو در همه آگهی ها..."
+              className="w-full rounded-full border-2 border-input bg-card py-2 pr-10 pl-4 h-12 text-base focus:outline-none focus:ring-2 focus:ring-primary/50 shadow-inner"
               value={query}
               onChange={handleInputChange}
               onFocus={() => setShowSuggestions(true)}
@@ -79,7 +79,7 @@ export default function Header() {
             {loading && <Loader2 className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 animate-spin text-muted-foreground" />}
           </div>
           {showSuggestions && (suggestions.length > 0 || loading) && (
-            <div className="absolute top-full mt-2 w-full rounded-md border bg-background shadow-lg z-50">
+            <div className="absolute top-full mt-2 w-full rounded-md border bg-popover shadow-lg z-50 glassmorphic">
               <div className="p-2">
                 <div className="flex items-center gap-2 text-sm font-semibold text-muted-foreground mb-2 px-2">
                   <Tags className="h-4 w-4" />
@@ -92,14 +92,14 @@ export default function Header() {
                      </div>
                   ) : (
                     suggestions.map((suggestion, index) => (
-                      <button key={index} className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded-full">
+                      <button key={index} className="px-3 py-1 text-sm bg-secondary hover:bg-secondary/80 rounded-full transition-colors">
                         {suggestion}
                       </button>
                     ))
                   )}
                 </div>
                  <div className="border-t my-2"></div>
-                 <Button variant="ghost" className="w-full justify-start">
+                 <Button variant="ghost" className="w-full justify-start text-muted-foreground hover:text-primary">
                     <SlidersHorizontal className="ml-2 h-4 w-4" />
                     جستجوی پیشرفته
                  </Button>

@@ -110,28 +110,30 @@ export default function ListingsPage() {
   return (
     <div className="container mx-auto py-8">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold font-headline">آگهی‌های اخیر</h1>
-        <Button variant="outline">
+        <h1 className="text-3xl font-bold font-headline text-foreground">آگهی‌های اخیر</h1>
+        <Button variant="outline" className="shadow-sm border-white/20 hover:bg-primary/10 hover:text-primary">
           <Filter className="w-4 h-4 ml-2" />
           فیلترها
         </Button>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {mockListings.map((listing) => (
-          <Card key={listing.id} className="overflow-hidden group">
+        {mockListings.map((listing, index) => (
+          <Card key={listing.id} className="bg-card overflow-hidden group transition-all duration-300 hover:shadow-deep-lg hover:-translate-y-1 gradient-border animate-subtle-float" style={{animationDelay: `${index * 100}ms`}}>
             <CardHeader className="p-0">
               <div className="relative">
-                <Image
-                  src={listing.image.src}
-                  alt={listing.image.alt}
-                  width={listing.image.width}
-                  height={listing.image.height}
-                  className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                  data-ai-hint={listing.image.hint}
-                />
-                 <Badge className="absolute top-2 right-2" variant={listing.price === 'رایگان' ? 'destructive' : 'default'}>{listing.category}</Badge>
-                 <Button size="icon" variant="ghost" className="absolute top-1 left-1 bg-black/30 hover:bg-black/60 text-white rounded-full">
+                 <Link href="#">
+                    <Image
+                      src={listing.image.src}
+                      alt={listing.image.alt}
+                      width={listing.image.width}
+                      height={listing.image.height}
+                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                      data-ai-hint={listing.image.hint}
+                    />
+                 </Link>
+                 <Badge className="absolute top-2 right-2 backdrop-blur-sm bg-black/50 text-white" variant={listing.price === 'رایگان' ? 'destructive' : 'default'}>{listing.category}</Badge>
+                 <Button size="icon" variant="ghost" className="absolute top-1 left-1 bg-black/30 hover:bg-primary text-white rounded-full transition-colors">
                     <Heart className="w-5 h-5"/>
                  </Button>
               </div>
@@ -145,14 +147,14 @@ export default function ListingsPage() {
                 </CardTitle>
             </CardContent>
             <CardFooter className="flex justify-between items-center p-4 pt-0">
-                <p className="text-sm font-bold text-primary">{listing.price}</p>
+                <p className="text-base font-bold text-primary">{listing.price}</p>
                 <p className="text-xs text-muted-foreground">{listing.timestamp}</p>
             </CardFooter>
           </Card>
         ))}
       </div>
        <div className="mt-8 text-center">
-          <Button variant="outline">مشاهده آگهی‌های بیشتر</Button>
+          <Button variant="outline" className="shadow-sm border-white/20 hover:bg-primary/10 hover:text-primary">مشاهده آگهی‌های بیشتر</Button>
        </div>
     </div>
   );
