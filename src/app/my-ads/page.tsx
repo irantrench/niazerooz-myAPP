@@ -41,14 +41,14 @@ const ads = [
     status: "در انتظار تایید",
     price: "۵٬۰۰۰٬۰۰۰٬۰۰۰ تومان",
     createdAt: "2023-10-24",
-    image: "https://picsum.photos/seed/apt1/400/300"
+    image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=800&auto=format&fit=crop"
   },
     {
     title: "مدرس خصوصی ریاضی",
     status: "منقضی شده",
     price: "ساعتی ۲۰۰٬۰۰۰ تومان",
     createdAt: "2023-09-15",
-     image: "https://picsum.photos/seed/math1/400/300"
+     image: "https://images.unsplash.com/photo-1509228627152-72ae9ae6848d?q=80&w=800&auto=format&fit=crop"
   },
 ];
 
