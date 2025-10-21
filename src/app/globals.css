@@ -81,6 +81,7 @@
     margin: -1px;
     border-radius: inherit;
     background: linear-gradient(to right, hsl(var(--primary)/0.2), hsl(var(--accent)/0.2));
+     transition: background 0.3s ease-in-out;
   }
 
   .gradient-border:hover::before {

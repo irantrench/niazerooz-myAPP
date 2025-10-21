@@ -17,13 +17,13 @@ import {
 
 const menuItems = [
   { icon: FileText, label: "آگهی‌های من", href: "/my-ads" },
-  { icon: KeyRound, label: "عبارت‌های کسب و کار من در گوگل", href: "#" },
-  { icon: Bookmark, label: "مجوزهای من", href: "#" },
-  { icon: Sparkles, label: "سرویس‌های من", href: "#" },
-  { icon: Wallet, label: "اعتبار مالی من", href: "#" },
-  { icon: Tag, label: "تعرفه سرویس‌ها", href: "#" },
-  { icon: ShoppingCart, label: "خرید یا تمدید سرویس", href: "#" },
-  { icon: Receipt, label: "مشخصات فاکتور رسمی", href: "#" },
+  { icon: KeyRound, label: "عبارت‌های کسب و کار من در گوگل", href: "/profile/google-keywords" },
+  { icon: Bookmark, label: "مجوزهای من", href: "/profile/licenses" },
+  { icon: Sparkles, label: "سرویس‌های من", href: "/profile/my-services" },
+  { icon: Wallet, label: "اعتبار مالی من", href: "/profile/wallet" },
+  { icon: Tag, label: "تعرفه سرویس‌ها", href: "/services" },
+  { icon: ShoppingCart, label: "خرید یا تمدید سرویس", href: "/services" },
+  { icon: Receipt, label: "مشخصات فاکتور رسمی", href: "/profile/invoice-info" },
 ];
 
 export default function ProfilePage() {
@@ -33,14 +33,16 @@ export default function ProfilePage() {
     <div className="bg-background min-h-screen">
       <div className="container px-4 py-4">
         {/* Banner */}
-        <div className="mb-6">
-          <Image
-            src="https://www.niazerooz.com/images/Personal/Banner.jpg"
-            alt="اعطای نمایندگی انحصاری"
-            width={1200}
-            height={200}
-            className="rounded-lg object-cover w-full"
-          />
+        <div className="mb-6 rounded-lg overflow-hidden shadow-lg hover:shadow-primary/30 transition-shadow duration-300">
+           <Link href="/services/vip">
+              <Image
+                src="https://www.niazerooz.com/images/Personal/Banner.jpg"
+                alt="اعطای نمایندگی انحصاری"
+                width={1200}
+                height={200}
+                className="object-cover w-full"
+              />
+           </Link>
         </div>
 
         {/* Page Title */}
@@ -68,20 +70,20 @@ export default function ProfilePage() {
               </div>
             </div>
           ) : (
-             <div className="bg-card p-4 rounded-xl shadow-sm border mb-6 text-center">
+             <div className="bg-card p-4 rounded-xl shadow-lg border mb-6 text-center">
                 <p className="mb-4">برای مدیریت آگهی‌ها و دسترسی به امکانات خود، وارد شوید.</p>
                 <Link href="/login">
-                  <button className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-10 px-4 py-2">
+                  <Button>
                     <LogIn className="w-4 h-4" />
                     <span>ورود یا ثبت‌نام</span>
-                  </button>
+                  </Button>
                 </Link>
              </div>
           )}
 
 
         {/* Menu List */}
-        <div className="bg-card rounded-xl shadow-sm border">
+        <div className="bg-card rounded-xl shadow-lg border">
             {menuItems.map((item, index) => (
                 <Link href={item.href} key={index}>
                     <div className="flex items-center justify-between p-4 group">
