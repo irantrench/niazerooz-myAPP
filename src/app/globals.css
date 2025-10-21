@@ -123,7 +123,6 @@
 
 .aurora-background {
   position: relative;
-  /* overflow: hidden; */ /* This was preventing scroll */
 }
 
 .aurora-background::before {
