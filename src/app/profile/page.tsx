@@ -11,11 +11,12 @@ import {
   ShoppingCart,
   Receipt,
   PenSquare,
-  KeyRound
+  KeyRound,
+  LogIn
 } from "lucide-react";
 
 const menuItems = [
-  { icon: FileText, label: "آگهی‌های من", href: "#" },
+  { icon: FileText, label: "آگهی‌های من", href: "/my-ads" },
   { icon: KeyRound, label: "عبارت‌های کسب و کار من در گوگل", href: "#" },
   { icon: Bookmark, label: "مجوزهای من", href: "#" },
   { icon: Sparkles, label: "سرویس‌های من", href: "#" },
@@ -26,6 +27,8 @@ const menuItems = [
 ];
 
 export default function ProfilePage() {
+  const isLoggedIn = false; // Mock data, will be replaced with real auth state
+
   return (
     <div className="bg-background min-h-screen">
       <div className="container px-4 py-4">
@@ -46,24 +49,36 @@ export default function ProfilePage() {
           <ChevronLeft className="w-6 h-6 text-muted-foreground" />
         </div>
 
-        {/* User Info */}
-        <div className="bg-card p-4 rounded-xl shadow-sm border mb-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-full">
-                <User className="w-6 h-6 text-primary" />
-              </div>
-              <div>
-                <p className="font-semibold text-foreground">هیلتی مارکت</p>
-                <p className="text-sm text-muted-foreground" dir="ltr">0939 563 6312</p>
+        {isLoggedIn ? (
+            <div className="bg-card p-4 rounded-xl shadow-sm border mb-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-full">
+                    <User className="w-6 h-6 text-primary" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-foreground">هیلتی مارکت</p>
+                    <p className="text-sm text-muted-foreground" dir="ltr">0939 563 6312</p>
+                  </div>
+                </div>
+                <Link href="#" className="text-primary text-sm font-semibold flex items-center gap-1">
+                  <PenSquare className="w-4 h-4"/>
+                  <span>ویرایش</span>
+                </Link>
               </div>
             </div>
-            <Link href="#" className="text-primary text-sm font-semibold flex items-center gap-1">
-              <PenSquare className="w-4 h-4"/>
-              <span>ویرایش</span>
-            </Link>
-          </div>
-        </div>
+          ) : (
+             <div className="bg-card p-4 rounded-xl shadow-sm border mb-6 text-center">
+                <p className="mb-4">برای مدیریت آگهی‌ها و دسترسی به امکانات خود، وارد شوید.</p>
+                <Link href="/login">
+                  <button className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-10 px-4 py-2">
+                    <LogIn className="w-4 h-4" />
+                    <span>ورود یا ثبت‌نام</span>
+                  </button>
+                </Link>
+             </div>
+          )}
+
 
         {/* Menu List */}
         <div className="bg-card rounded-xl shadow-sm border">
