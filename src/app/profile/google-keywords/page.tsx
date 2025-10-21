@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Loader2, Wand2, Star, TrendingUp, Search } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const mockAnalysisResult = [
   { keyword: 'اجاره هیلتی در تهران', rank: '1-3', competition: 'بالا', potential: 'عالی' },
