@@ -8,10 +8,10 @@ export interface Category {
 export interface Listing {
   id: string;
   title: string;
-  description: string;
   price: string;
   category: string;
   location: string;
+  timestamp: string;
   image: {
     src: string;
     width: number;

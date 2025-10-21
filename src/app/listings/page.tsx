@@ -11,14 +11,21 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Heart, Filter } from 'lucide-react';
+import type { Listing } from '@/lib/types';
 
-const mockListings = [
+const mockListings: Listing[] = [
   {
     id: '1',
     title: 'فروش آپارتمان ۱۲۰ متری نوساز',
     price: '۵٬۲۰۰٬۰۰۰٬۰۰۰ تومان',
     location: 'تهران، سعادت آباد',
-    image: 'https://picsum.photos/seed/ad1/400/300',
+    image: {
+      src: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=800&auto=format&fit=crop',
+      width: 800,
+      height: 600,
+      alt: 'A modern apartment building in a bustling city.',
+      hint: 'apartment building'
+    },
     category: 'املاک',
     timestamp: 'لحظاتی پیش',
   },
@@ -27,7 +34,13 @@ const mockListings = [
     title: 'خودروی پژو پارس مدل ۱۴۰۲',
     price: '۷۵۰٬۰۰۰٬۰۰۰ تومان',
     location: 'اصفهان، مرکز شهر',
-    image: 'https://picsum.photos/seed/ad2/400/300',
+     image: {
+      src: 'https://images.unsplash.com/photo-1619409869401-446a06950267?q=80&w=800&auto=format&fit=crop',
+      width: 800,
+      height: 600,
+      alt: 'A clean, white modern car, a Peugeot Pars.',
+      hint: 'white car'
+    },
     category: 'وسایل نقلیه',
     timestamp: '۵ دقیقه پیش',
   },
@@ -36,7 +49,13 @@ const mockListings = [
     title: 'استخدام برنامه‌نویس React',
     price: 'توافقی',
     location: 'مشهد، احمدآباد',
-    image: 'https://picsum.photos/seed/ad3/400/300',
+    image: {
+      src: 'https://images.unsplash.com/photo-1550439062-609e1531270e?q=80&w=800&auto=format&fit=crop',
+      width: 800,
+      height: 600,
+      alt: 'A person working on a laptop with code on the screen.',
+      hint: 'developer job'
+    },
     category: 'استخدام',
     timestamp: '۱ ساعت پیش',
   },
@@ -45,7 +64,13 @@ const mockListings = [
     title: 'مبل راحتی ۷ نفره در حد نو',
     price: '۱۵٬۰۰۰٬۰۰۰ تومان',
     location: 'شیراز، معالی‌آباد',
-    image: 'https://picsum.photos/seed/ad4/400/300',
+    image: {
+      src: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=800&auto=format&fit=crop',
+      width: 800,
+      height: 600,
+      alt: 'A comfortable and modern living room sofa.',
+      hint: 'modern sofa'
+    },
     category: 'لوازم خانگی',
     timestamp: '۳ ساعت پیش',
   },
@@ -54,7 +79,13 @@ const mockListings = [
     title: 'تدریس خصوصی ریاضیات کنکور',
     price: 'تماس بگیرید',
     location: 'آنلاین',
-    image: 'https://picsum.photos/seed/ad5/400/300',
+    image: {
+      src: 'https://images.unsplash.com/photo-1509228627152-72ae9ae6848d?q=80&w=800&auto=format&fit=crop',
+      width: 800,
+      height: 600,
+      alt: 'A person teaching or tutoring mathematics on a chalkboard.',
+      hint: 'math tutoring'
+    },
     category: 'آموزش',
     timestamp: 'دیروز',
   },
@@ -63,7 +94,13 @@ const mockListings = [
     title: 'واگذاری گربه پرشین',
     price: 'رایگان',
     location: 'کرج، گوهردشت',
-    image: 'https://picsum.photos/seed/ad6/400/300',
+    image: {
+      src: 'https://images.unsplash.com/photo-1574158622682-e40e69841006?q=80&w=800&auto=format&fit=crop',
+      width: 800,
+      height: 600,
+      alt: 'A cute Persian cat looking at the camera.',
+      hint: 'persian cat'
+    },
     category: 'حیوانات',
     timestamp: 'دیروز',
   },
@@ -86,11 +123,12 @@ export default function ListingsPage() {
             <CardHeader className="p-0">
               <div className="relative">
                 <Image
-                  src={listing.image}
-                  alt={listing.title}
-                  width={400}
-                  height={300}
+                  src={listing.image.src}
+                  alt={listing.image.alt}
+                  width={listing.image.width}
+                  height={listing.image.height}
                   className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                  data-ai-hint={listing.image.hint}
                 />
                  <Badge className="absolute top-2 right-2" variant={listing.price === 'رایگان' ? 'destructive' : 'default'}>{listing.category}</Badge>
                  <Button size="icon" variant="ghost" className="absolute top-1 left-1 bg-black/30 hover:bg-black/60 text-white rounded-full">
@@ -119,5 +157,3 @@ export default function ListingsPage() {
     </div>
   );
 }
-
-    

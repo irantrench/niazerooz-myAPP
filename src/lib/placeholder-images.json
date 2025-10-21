@@ -2,39 +2,39 @@
   "placeholderImages": [
     {
       "id": "listing-1",
-      "description": "A modern sedan parked on a city street.",
-      "imageUrl": "https://images.unsplash.com/photo-1592853625597-7d17be820d0c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxtb2Rlcm4lMjBjYXJ8ZW58MHx8fHwxNzYwOTQyOTA1fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "modern car"
+      "description": "A modern apartment building in a bustling city.",
+      "imageUrl": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "imageHint": "apartment building"
     },
     {
       "id": "listing-2",
-      "description": "A stylish apartment living room with a view.",
-      "imageUrl": "https://images.unsplash.com/photo-1689043528099-2ba014dd7c64?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxhcGFydG1lbnQlMjBpbnRlcmlvcnxlbnwwfHx8fDE3NjA5NTEyNDZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "apartment interior"
+      "description": "A clean, white modern car, a Peugeot Pars.",
+      "imageUrl": "https://images.unsplash.com/photo-1619409869401-446a06950267?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "imageHint": "white car"
     },
     {
       "id": "listing-3",
-      "description": "A person using a laptop for remote work.",
-      "imageUrl": "https://images.unsplash.com/photo-1657697070834-30536672247d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxmcmVlbGFuY2UlMjB3b3JrfGVufDB8fHx8MTc2MTA2MjUyM3ww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "freelance work"
+      "description": "A person working on a laptop with code on the screen.",
+      "imageUrl": "https://images.unsplash.com/photo-1550439062-609e1531270e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "imageHint": "developer job"
     },
     {
       "id": "listing-4",
-      "description": "A collection of vintage cameras on a shelf.",
-      "imageUrl": "https://images.unsplash.com/photo-1614306539687-d59cc9ce2931?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx2aW50YWdlJTIwaXRlbXN8ZW58MHx8fHwxNzYxMDYyNTIzfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "vintage items"
+      "description": "A comfortable and modern living room sofa.",
+      "imageUrl": "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "imageHint": "modern sofa"
     },
     {
       "id": "listing-5",
-      "description": "A person providing gardening services.",
-      "imageUrl": "https://images.unsplash.com/photo-1758524055610-24248eefebb6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxnYXJkZW5pbmclMjBzZXJ2aWNlfGVufDB8fHx8MTc2MDk5MDg5NHww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "gardening service"
+      "description": "A person teaching or tutoring mathematics on a chalkboard.",
+      "imageUrl": "https://images.unsplash.com/photo-1509228627152-72ae9ae6848d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "imageHint": "math tutoring"
     },
     {
       "id": "listing-6",
-      "description": "A brand new smartphone in its box.",
-      "imageUrl": "https://images.unsplash.com/photo-1631278919249-b985fdb1f901?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxuZXclMjBzbWFydHBob25lfGVufDB8fHx8MTc2MTAxODYxMHww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "new smartphone"
+      "description": "A cute Persian cat looking at the camera.",
+      "imageUrl": "https://images.unsplash.com/photo-1574158622682-e40e69841006?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "imageHint": "persian cat"
     }
   ]
 }
