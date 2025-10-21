@@ -1,11 +1,11 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { ArrowLeft, ArrowRight, Camera, Check, DollarSign, List, FileText, Loader2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Camera, Check, DollarSign, List, FileText, Loader2, Upload, Video, X, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -27,10 +27,12 @@ import {
 } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Progress } from '@/components/ui/progress';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { toast } from '@/hooks/use-toast';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { useToast } from '@/hooks/use-toast';
 import CategoryBrowser from '@/components/category-browser';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 const adSchema = z.object({
   category: z.string().min(1, 'انتخاب دسته‌بندی الزامی است.'),
@@ -38,7 +40,11 @@ const adSchema = z.object({
   description: z.string().min(20, 'توضیحات باید حداقل ۲۰ کاراکتر باشد.'),
   priceType: z.enum(['fixed', 'negotiable', 'free']),
   price: z.string().optional(),
-  image: z.string().optional(), // In a real app, this would be a file upload
+  images: z.array(z.string()).optional(),
+  location: z.object({
+    latitude: z.number(),
+    longitude: z.number(),
+  }).optional(),
 });
 
 type AdFormValues = z.infer<typeof adSchema>;
@@ -47,14 +53,22 @@ const steps = [
   { id: 'category', title: 'انتخاب دسته‌بندی', icon: List },
   { id: 'details', title: 'جزئیات آگهی', icon: FileText },
   { id: 'pricing', title: 'قیمت‌گذاری', icon: DollarSign },
-  { id: 'media', title: 'تصویر آگهی', icon: Camera },
+  { id: 'media', title: 'تصاویر و موقعیت', icon: Camera },
   { id: 'finish', title: 'پایان', icon: Check },
 ];
 
 export default function PostAdPage() {
   const [currentStep, setCurrentStep] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  
+  const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
+  const [uploadedImages, setUploadedImages] = useState<string[]>([]);
+  const [location, setLocation] = useState<AdFormValues['location']>();
+
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
+
   const form = useForm<AdFormValues>({
     resolver: zodResolver(adSchema),
     defaultValues: {
@@ -63,10 +77,45 @@ export default function PostAdPage() {
       description: '',
       priceType: 'fixed',
       price: '',
-      image: '',
+      images: [],
     },
     mode: 'onChange'
   });
+
+  useEffect(() => {
+    if (currentStep === 3) { // Media step
+      const getCameraPermission = async () => {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+           setHasCameraPermission(false);
+           return;
+        }
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+          setHasCameraPermission(true);
+          if (videoRef.current) {
+            videoRef.current.srcObject = stream;
+          }
+        } catch (error) {
+          console.error('Error accessing camera:', error);
+          setHasCameraPermission(false);
+          toast({
+            variant: 'destructive',
+            title: 'عدم دسترسی به دوربین',
+            description: 'برای استفاده از دوربین، لطفاً در تنظیمات مرورگر خود دسترسی لازم را بدهید.',
+          });
+        }
+      };
+      getCameraPermission();
+      
+      // Cleanup function to stop video stream
+      return () => {
+        if (videoRef.current && videoRef.current.srcObject) {
+          const stream = videoRef.current.srcObject as MediaStream;
+          stream.getTracks().forEach(track => track.stop());
+        }
+      }
+    }
+  }, [currentStep, toast]);
 
   const selectedCategory = form.watch('category');
 
@@ -92,7 +141,9 @@ export default function PostAdPage() {
         }
         break;
       case 3:
-        isValid = true; // Image upload is optional
+        form.setValue('images', uploadedImages);
+        form.setValue('location', location);
+        isValid = true; // Media is optional
         break;
     }
 
@@ -111,20 +162,80 @@ export default function PostAdPage() {
   
   const onSubmit = async (data: AdFormValues) => {
     setIsLoading(true);
-    console.log(data);
-    // Simulate API call
+    console.log("Submitting form data:", data);
     await new Promise(resolve => setTimeout(resolve, 2000));
     setIsLoading(false);
-    setCurrentStep(steps.length - 1); // Go to finish step
+    setCurrentStep(steps.length - 1);
   };
   
+  const handleCapture = () => {
+    if (videoRef.current && canvasRef.current) {
+      const video = videoRef.current;
+      const canvas = canvasRef.current;
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const context = canvas.getContext('2d');
+      context?.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+      const dataUrl = canvas.toDataURL('image/png');
+      if (uploadedImages.length < 8) {
+        setUploadedImages([...uploadedImages, dataUrl]);
+      } else {
+        toast({ variant: 'destructive', title: 'محدودیت تعداد تصاویر', description: 'شما به حداکثر تعداد تصاویر (۸) رسیده‌اید.' });
+      }
+    }
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      const newImages: string[] = [];
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          if (e.target?.result) {
+            newImages.push(e.target.result as string);
+            if (newImages.length === files.length) {
+              if (uploadedImages.length + newImages.length <= 8) {
+                setUploadedImages([...uploadedImages, ...newImages]);
+              } else {
+                 toast({ variant: 'destructive', title: 'محدودیت تعداد تصاویر', description: `شما فقط می‌توانید ${8 - uploadedImages.length} تصویر دیگر اضافه کنید.` });
+              }
+            }
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  };
+
+  const removeImage = (index: number) => {
+    setUploadedImages(uploadedImages.filter((_, i) => i !== index));
+  };
+
+  const handleLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const { latitude, longitude } = position.coords;
+        setLocation({ latitude, longitude });
+        console.log("Location found:", { latitude, longitude });
+        toast({ title: 'موقعیت مکانی یافت شد', description: `موقعیت شما با موفقیت ثبت شد.` });
+      }, (error) => {
+        console.error("Geolocation error:", error);
+        toast({ variant: 'destructive', title: 'خطا در یافتن موقعیت', description: 'لطفاً دسترسی به موقعیت مکانی را فعال کنید.' });
+      });
+    } else {
+       toast({ variant: 'destructive', title: 'موقعیت مکانی پشتیبانی نمی‌شود', description: 'مرورگر شما از قابلیت موقعیت مکانی پشتیبانی نمی‌کند.' });
+    }
+  };
+
   const progress = ((currentStep) / (steps.length - 2)) * 100;
 
   return (
     <div className="container mx-auto py-8">
-      <Card className="max-w-3xl mx-auto">
+      <Card className="max-w-3xl mx-auto shadow-deep-lg">
         <CardHeader>
-          <CardTitle className="text-center text-2xl font-headline">
+          <CardTitle className="text-center text-2xl font-headline flex items-center justify-center gap-2">
+            <steps[currentStep].icon className="w-6 h-6 text-primary" />
             {steps[currentStep].title}
           </CardTitle>
           {currentStep < steps.length - 1 && (
@@ -136,7 +247,7 @@ export default function PostAdPage() {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               {currentStep === 0 && (
                 <div>
-                   <p className="text-center text-muted-foreground mb-4">لطفا گروه آگهی خود را انتخاب کنید.</p>
+                   <CardDescription className="text-center mb-4">لطفا گروه آگهی خود را انتخاب کنید.</CardDescription>
                    <div onClick={(e) => {
                      const target = e.target as HTMLElement;
                      const categoryElement = target.closest('.group');
@@ -160,7 +271,7 @@ export default function PostAdPage() {
               )}
 
               {currentStep === 1 && (
-                <div className="space-y-6">
+                <div className="space-y-6 animate-in fade-in-50">
                   <FormField
                     control={form.control}
                     name="title"
@@ -195,7 +306,7 @@ export default function PostAdPage() {
               )}
 
               {currentStep === 2 && (
-                <div className="space-y-6">
+                <div className="space-y-6 animate-in fade-in-50">
                   <FormField
                     control={form.control}
                     name="priceType"
@@ -208,19 +319,19 @@ export default function PostAdPage() {
                             defaultValue={field.value}
                             className="flex flex-col space-y-2"
                           >
-                            <FormItem className="flex items-center space-x-3 space-y-0">
+                            <FormItem className="flex items-center space-x-3 rtl:space-x-reverse space-y-0">
                               <FormControl>
                                 <RadioGroupItem value="fixed" />
                               </FormControl>
                               <FormLabel className="font-normal">قیمت مقطوع</FormLabel>
                             </FormItem>
-                            <FormItem className="flex items-center space-x-3 space-y-0">
+                            <FormItem className="flex items-center space-x-3 rtl:space-x-reverse space-y-0">
                               <FormControl>
                                 <RadioGroupItem value="negotiable" />
                               </FormControl>
                               <FormLabel className="font-normal">توافقی</FormLabel>
                             </FormItem>
-                             <FormItem className="flex items-center space-x-3 space-y-0">
+                             <FormItem className="flex items-center space-x-3 rtl:space-x-reverse space-y-0">
                               <FormControl>
                                 <RadioGroupItem value="free" />
                               </FormControl>
@@ -251,30 +362,99 @@ export default function PostAdPage() {
               )}
               
               {currentStep === 3 && (
-                <div className="flex flex-col items-center justify-center space-y-4">
-                    <div className="w-full h-48 border-2 border-dashed rounded-lg flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-800/50">
-                        <Camera className="w-12 h-12 text-gray-400 mb-2"/>
-                        <p className="text-muted-foreground">تصویر آگهی خود را اینجا بکشید و رها کنید</p>
-                        <p className="text-xs text-muted-foreground">یا</p>
-                        <Button type="button" variant="outline" className="mt-2">انتخاب فایل</Button>
+                <div className="space-y-6 animate-in fade-in-50">
+                  {hasCameraPermission === false && (
+                    <Alert variant="destructive">
+                      <Video className="h-4 w-4" />
+                      <AlertTitle>دسترسی به دوربین لازم است</AlertTitle>
+                      <AlertDescription>
+                        برای گرفتن عکس زنده، لطفاً دسترسی به دوربین را در مرورگر خود فعال کنید.
+                      </AlertDescription>
+                    </Alert>
+                  )}
+                  
+                  <div className="relative w-full aspect-video bg-muted rounded-lg overflow-hidden flex items-center justify-center">
+                    <video ref={videoRef} className="w-full h-full object-cover" autoPlay muted playsInline />
+                    <canvas ref={canvasRef} className="hidden"></canvas>
+                    {hasCameraPermission !== true && <Camera className="w-16 h-16 text-muted-foreground" />}
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <Button type="button" onClick={handleCapture} disabled={!hasCameraPermission}>
+                      <Camera className="ml-2" />
+                      گرفتن عکس
+                    </Button>
+                    <Button type="button" variant="outline" onClick={() => fileInputRef.current?.click()}>
+                      <Upload className="ml-2" />
+                      انتخاب فایل از گالری
+                    </Button>
+                    <input 
+                      type="file" 
+                      ref={fileInputRef} 
+                      className="hidden" 
+                      accept="image/*" 
+                      multiple
+                      onChange={handleFileChange}
+                    />
+                  </div>
+
+                  {uploadedImages.length > 0 && (
+                    <div>
+                      <FormLabel>پیش‌نمایش تصاویر ({uploadedImages.length}/8)</FormLabel>
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-2">
+                        {uploadedImages.map((image, index) => (
+                          <div key={index} className="relative group">
+                            <Image src={image} alt={`Uploaded image ${index + 1}`} width={150} height={150} className="rounded-md object-cover aspect-square w-full" />
+                            <Button
+                              type="button"
+                              variant="destructive"
+                              size="icon"
+                              className="absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                              onClick={() => removeImage(index)}
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                    <FormDescription>
-                        حداکثر ۸ تصویر می‌توانید بارگذاری کنید.
-                    </FormDescription>
+                  )}
+
+                  <div className="border-t pt-6">
+                     <FormLabel>موقعیت مکانی (اختیاری)</FormLabel>
+                     <div className="flex items-center gap-4 mt-2">
+                        <Button type="button" variant="outline" onClick={handleLocation} className="w-full">
+                           <MapPin className="ml-2"/>
+                           {location ? 'موقعیت مکانی ثبت شد' : 'افزودن موقعیت مکانی فعلی'}
+                        </Button>
+                        {location && (
+                           <p className="text-xs text-muted-foreground" dir="ltr">
+                              {location.latitude.toFixed(4)}, {location.longitude.toFixed(4)}
+                           </p>
+                        )}
+                     </div>
+                     <FormDescription className="mt-2">
+                        ثبت موقعیت مکانی دقیق، به کاربران کمک می‌کند آگهی شما را راحت‌تر پیدا کنند.
+                     </FormDescription>
+                  </div>
                 </div>
               )}
 
               {currentStep === 4 && (
-                 <div className="text-center py-10">
+                 <div className="text-center py-10 animate-in fade-in-50 zoom-in-95">
                     <Check className="w-16 h-16 text-green-500 mx-auto mb-4 bg-green-100 dark:bg-green-900/50 rounded-full p-2" />
                     <h2 className="text-2xl font-bold mb-2">آگهی شما با موفقیت ثبت شد!</h2>
                     <p className="text-muted-foreground mb-6">آگهی شما پس از تایید توسط مدیران، در سایت نمایش داده خواهد شد.</p>
                     <div className="flex gap-4 justify-center">
                         <Button onClick={() => {
                           form.reset();
+                          setUploadedImages([]);
+                          setLocation(undefined);
                           setCurrentStep(0);
                         }}>ثبت آگهی جدید</Button>
-                        <Button variant="outline">مشاهده آگهی‌های من</Button>
+                        <Link href="/my-ads">
+                           <Button variant="outline">مشاهده آگهی‌های من</Button>
+                        </Link>
                     </div>
                 </div>
               )}
@@ -309,6 +489,10 @@ export default function PostAdPage() {
                       )}
                    </Button>
                   )}
+                  
+                  {currentStep >= steps.length - 1 && (
+                     <div></div>
+                  )}
               </div>
             </form>
           </Form>
@@ -317,3 +501,5 @@ export default function PostAdPage() {
     </div>
   );
 }
+
+    
