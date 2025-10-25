@@ -86,3 +86,199 @@ Generated sources: prelude.gql [73219B] main/input.gql [45753B] main/relation.gq
 [debug] [2025-10-25T14:10:40.953Z] <<< [apiv2][body] POST http://127.0.0.1:4400/dataconnect/clearData {"success":true}
 [info] [Firebase Plugin] Stopping Data Connect toolkit
 [warn] ⚠  Data Connect Emulator has exited upon receiving signal: SIGINT 
+[debug] [2025-10-25T16:39:27.972Z] [Firebase Plugin] Activating Firebase extension.
+[debug] [2025-10-25T16:39:34.582Z] [Firebase Plugin] requireAuthWrapper
+[debug] [2025-10-25T16:39:34.584Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-25T16:39:34.585Z] > authorizing via signed-in user (arian.rad7878@gmail.com)
+[debug] [2025-10-25T16:39:34.591Z] Checked if tokens are valid: false, expires at: 1761403609042
+[debug] [2025-10-25T16:39:34.592Z] Checked if tokens are valid: false, expires at: 1761403609042
+[debug] [2025-10-25T16:39:34.593Z] > refreshing access token with scopes: []
+[debug] [2025-10-25T16:39:34.595Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-25T16:39:34.596Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-25T16:39:34.641Z] [Firebase Plugin] VSCode notification server listening on port 40001
+[debug] [2025-10-25T16:39:35.402Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-25T16:39:35.403Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-25T16:39:35.415Z] [Firebase Plugin] User found:  arian.rad7878@gmail.com
+[info] [Firebase Plugin] (Core:Project) New user detected, fetching projects
+[debug] [2025-10-25T16:39:35.417Z] Checked if tokens are valid: true, expires at: 1761413974404
+[debug] [2025-10-25T16:39:35.419Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=1000
+[debug] [2025-10-25T16:39:35.823Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2025-10-25T16:39:35.823Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[info] [Firebase Plugin] Starting Data Connect toolkit (version 2.15.0) on port 50001
+[debug] [2025-10-25T16:39:40.412Z] W1025 16:39:40.408842   34510 control.go:68] [/emulator/studio 48c9] connector "example" has errors: example/queries.gql:34:21: Field "receiverId_expr" is not defined by type "Message_Filter". Did you mean "receiverId" or "receiver"?
+
+sources: example/queries.gql [883B] 
+I1025 16:39:40.410306   34510 control.go:94] [/emulator/studio 48c9] UpdateResources(): done
+Main schema: sources: schema/schema.gql [741B] 
+Connector "example": sources: example/queries.gql [883B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"W1025 16:39:40.408842   34510 control.go:68] [/emulator/studio 48c9] connector \"example\" has errors: example/queries.gql:34:21: Field \"receiverId_expr\" is not defined by type \"Message_Filter\". Did you mean \"receiverId\" or \"receiver\"?\n\nsources: example/queries.gql [883B] \nI1025 16:39:40.410306   34510 control.go:94] [/emulator/studio 48c9] UpdateResources(): done\nMain schema: sources: schema/schema.gql [741B] \nConnector \"example\": sources: example/queries.gql [883B] \n"}}
+[debug] [2025-10-25T16:39:40.414Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2025-10-25T16:39:40.414Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2025-10-25T16:39:40.415Z] Starting Data Connect Emulator with command {"binary":"/home/user/.cache/firebase/emulators/dataconnect-emulator-2.15.0","args":["--logtostderr","-v=2","dev","--listen=localhost:50001","--config_dir=/home/user/studio/dataconnect","--enable_output_schema_extensions=true","--enable_output_generated_sdk=true"],"optionalArgs":["listen","config_dir","enable_output_schema_extensions","enable_output_generated_sdk"],"joinArgs":true,"shell":false,"port":9399} {"metadata":{"emulator":{"name":"dataconnect"},"message":"Starting Data Connect Emulator with command {\"binary\":\"/home/user/.cache/firebase/emulators/dataconnect-emulator-2.15.0\",\"args\":[\"--logtostderr\",\"-v=2\",\"dev\",\"--listen=localhost:50001\",\"--config_dir=/home/user/studio/dataconnect\",\"--enable_output_schema_extensions=true\",\"--enable_output_generated_sdk=true\"],\"optionalArgs\":[\"listen\",\"config_dir\",\"enable_output_schema_extensions\",\"enable_output_generated_sdk\"],\"joinArgs\":true,\"shell\":false,\"port\":9399}"}}
+[info] i  dataconnect: Data Connect Emulator logging to dataconnect-debug.log {"metadata":{"emulator":{"name":"dataconnect"},"message":"Data Connect Emulator logging to dataconnect-debug.log"}}
+[debug] [2025-10-25T16:39:40.733Z] I1025 16:39:40.478650   34515 load.go:31] Reloading schema and connectors...
+W1025 16:39:40.629116   34515 control.go:68] [/emulator/studio a030] connector "example" has errors: example/queries.gql:34:21: Field "receiverId_expr" is not defined by type "Message_Filter". Did you mean "receiverId" or "receiver"?
+
+sources: example/queries.gql [883B] 
+I1025 16:39:40.629225   34515 control.go:94] [/emulator/studio a030] UpdateResources(): done
+Main schema: sources: schema/schema.gql [741B] 
+Connector "example": sources: example/queries.gql [883B] 
+E1025 16:39:40.633963   34515 load.go:73] Could not load sources: 
+Errors: example/queries.gql:34:21: Field "receiverId_expr" is not defined by type "Message_Filter". Did you mean "receiverId" or "receiver"?
+I1025 16:39:40.641035   34515 collector.go:107] schema extensions wrote into "/home/user/studio/dataconnect/.dataconnect/schema"
+Generated sources: prelude.gql [73219B] main/implicit.gql [2822B] main/input.gql [45753B] main/relation.gql [23641B] main/query.gql [6300B] main/mutation.gql [17049B] 
+I1025 16:39:40.641236   34515 load.go:74] Finished reloading
+I1025 16:39:40.682154   34515 dev.go:102] Listening on address (HTTP + gRPC): 127.0.0.1:50001
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I1025 16:39:40.478650   34515 load.go:31] Reloading schema and connectors...\nW1025 16:39:40.629116   34515 control.go:68] [/emulator/studio a030] connector \"example\" has errors: example/queries.gql:34:21: Field \"receiverId_expr\" is not defined by type \"Message_Filter\". Did you mean \"receiverId\" or \"receiver\"?\n\nsources: example/queries.gql [883B] \nI1025 16:39:40.629225   34515 control.go:94] [/emulator/studio a030] UpdateResources(): done\nMain schema: sources: schema/schema.gql [741B] \nConnector \"example\": sources: example/queries.gql [883B] \nE1025 16:39:40.633963   34515 load.go:73] Could not load sources: \nErrors: example/queries.gql:34:21: Field \"receiverId_expr\" is not defined by type \"Message_Filter\". Did you mean \"receiverId\" or \"receiver\"?\nI1025 16:39:40.641035   34515 collector.go:107] schema extensions wrote into \"/home/user/studio/dataconnect/.dataconnect/schema\"\nGenerated sources: prelude.gql [73219B] main/implicit.gql [2822B] main/input.gql [45753B] main/relation.gql [23641B] main/query.gql [6300B] main/mutation.gql [17049B] \nI1025 16:39:40.641236   34515 load.go:74] Finished reloading\nI1025 16:39:40.682154   34515 dev.go:102] Listening on address (HTTP + gRPC): 127.0.0.1:50001\n"}}
+[debug] [2025-10-25T16:39:41.016Z] I1025 16:39:41.015718   34515 engine.go:169] [/emulator/studio a030] ExecuteGraphqlRead IntrospectionQuery: succeeded. 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I1025 16:39:41.015718   34515 engine.go:169] [/emulator/studio a030] ExecuteGraphqlRead IntrospectionQuery: succeeded. \n"}}
+[debug] [2025-10-25T16:41:10.877Z] [Firebase Plugin] Value of process.env.MONOSPACE_ENV: true
+[debug] [2025-10-25T16:41:10.877Z] [Firebase Plugin] requireAuthWrapper
+[debug] [2025-10-25T16:41:10.878Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-25T16:41:10.879Z] > authorizing via signed-in user (arian.rad7878@gmail.com)
+[debug] [2025-10-25T16:41:10.880Z] Checked if tokens are valid: true, expires at: 1761413974404
+[debug] [2025-10-25T16:41:10.880Z] [Firebase Plugin] User found:  arian.rad7878@gmail.com
+[info] [Firebase Plugin] (Core:Project) New user detected, fetching projects
+[debug] [2025-10-25T16:41:10.881Z] Checked if tokens are valid: true, expires at: 1761413974404
+[debug] [2025-10-25T16:41:10.882Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=1000
+[debug] [2025-10-25T16:41:11.067Z] [Firebase Plugin] Value of process.env.MONOSPACE_ENV: true
+[debug] [2025-10-25T16:41:11.067Z] [Firebase Plugin] requireAuthWrapper
+[debug] [2025-10-25T16:41:11.068Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-25T16:41:11.069Z] > authorizing via signed-in user (arian.rad7878@gmail.com)
+[debug] [2025-10-25T16:41:11.070Z] Emulator locator file path: /tmp/hub-studio-wtjb2.json
+[debug] [2025-10-25T16:41:11.071Z] Found emulator locator with different version: {"version":"14.22.0","origins":["http://127.0.0.1:4400"]}, CLI_VERSION: 14.20.0
+[debug] [2025-10-25T16:41:11.072Z] >>> [apiv2][query] GET http://127.0.0.1:4400/emulators [none]
+[debug] [2025-10-25T16:41:11.075Z] Checked if tokens are valid: true, expires at: 1761413974404
+[debug] [2025-10-25T16:41:11.076Z] [Firebase Plugin] User found:  arian.rad7878@gmail.com
+[info] [Firebase Plugin] (Core:Project) New user detected, fetching projects
+[debug] [2025-10-25T16:41:11.077Z] Checked if tokens are valid: true, expires at: 1761413974404
+[debug] [2025-10-25T16:41:11.079Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=1000
+[debug] [2025-10-25T16:41:11.121Z] <<< [apiv2][status] GET http://127.0.0.1:4400/emulators 200
+[debug] [2025-10-25T16:41:11.122Z] <<< [apiv2][body] GET http://127.0.0.1:4400/emulators {"hub":{"listen":[{"address":"127.0.0.1","family":"IPv4","port":4400}],"name":"hub","host":"127.0.0.1","port":4400},"logging":{"listen":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"name":"logging","host":"127.0.0.1","port":4500},"dataconnect":{"listen":[{"address":"127.0.0.1","family":"IPv4","port":9399}],"name":"dataconnect","host":"127.0.0.1","port":9399,"pid":12632,"timeout":10000}}
+[debug] [2025-10-25T16:41:11.352Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2025-10-25T16:41:11.353Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[debug] [2025-10-25T16:41:11.507Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2025-10-25T16:41:11.508Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[debug] [2025-10-25T20:19:58.517Z] [Firebase Plugin] Activating Firebase extension.
+[debug] [2025-10-25T20:20:07.719Z] [Firebase Plugin] requireAuthWrapper
+[debug] [2025-10-25T20:20:07.722Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-25T20:20:07.723Z] > authorizing via signed-in user (arian.rad7878@gmail.com)
+[debug] [2025-10-25T20:20:07.728Z] Checked if tokens are valid: false, expires at: 1761413974404
+[debug] [2025-10-25T20:20:07.729Z] Checked if tokens are valid: false, expires at: 1761413974404
+[debug] [2025-10-25T20:20:07.730Z] > refreshing access token with scopes: []
+[debug] [2025-10-25T20:20:07.733Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-25T20:20:07.733Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-25T20:20:07.806Z] [Firebase Plugin] VSCode notification server listening on port 40001
+[debug] [2025-10-25T20:20:08.115Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-25T20:20:08.117Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-25T20:20:08.147Z] [Firebase Plugin] User found:  arian.rad7878@gmail.com
+[info] [Firebase Plugin] (Core:Project) New user detected, fetching projects
+[debug] [2025-10-25T20:20:08.161Z] Checked if tokens are valid: true, expires at: 1761427207118
+[debug] [2025-10-25T20:20:08.167Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=1000
+[debug] [2025-10-25T20:20:08.712Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2025-10-25T20:20:08.713Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[info] [Firebase Plugin] Starting Data Connect toolkit (version 2.15.0) on port 50001
+[info] i  dataconnect: downloading dataconnect-emulator-2.15.0... {"metadata":{"emulator":{"name":"dataconnect"},"message":"downloading dataconnect-emulator-2.15.0..."}}
+[debug] [2025-10-25T20:20:23.403Z] >>> [apiv2][query] GET https://storage.googleapis.com/firemat-preview-drop/emulator/dataconnect-emulator-linux-v2.15.0 
+[debug] [2025-10-25T20:20:23.891Z] <<< [apiv2][status] GET https://storage.googleapis.com/firemat-preview-drop/emulator/dataconnect-emulator-linux-v2.15.0 200
+[debug] [2025-10-25T20:20:23.892Z] <<< [apiv2][body] GET https://storage.googleapis.com/firemat-preview-drop/emulator/dataconnect-emulator-linux-v2.15.0 [stream]
+[info] i  dataconnect: Removing outdated emulator files: dataconnect-emulator-2.15.1 {"metadata":{"emulator":{"name":"dataconnect"},"message":"Removing outdated emulator files: dataconnect-emulator-2.15.1"}}
+[debug] [2025-10-25T20:20:27.419Z] W1025 20:20:27.416668     376 control.go:68] [/emulator/studio a116] connector "example" has errors: example/queries.gql:34:21: Field "receiverId_expr" is not defined by type "Message_Filter". Did you mean "receiverId" or "receiver"?
+
+sources: example/queries.gql [883B] 
+I1025 20:20:27.416973     376 control.go:94] [/emulator/studio a116] UpdateResources(): done
+Main schema: sources: schema/schema.gql [741B] 
+Connector "example": sources: example/queries.gql [883B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"W1025 20:20:27.416668     376 control.go:68] [/emulator/studio a116] connector \"example\" has errors: example/queries.gql:34:21: Field \"receiverId_expr\" is not defined by type \"Message_Filter\". Did you mean \"receiverId\" or \"receiver\"?\n\nsources: example/queries.gql [883B] \nI1025 20:20:27.416973     376 control.go:94] [/emulator/studio a116] UpdateResources(): done\nMain schema: sources: schema/schema.gql [741B] \nConnector \"example\": sources: example/queries.gql [883B] \n"}}
+[debug] [2025-10-25T20:20:27.422Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2025-10-25T20:20:27.422Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2025-10-25T20:20:27.423Z] Starting Data Connect Emulator with command {"binary":"/home/user/.cache/firebase/emulators/dataconnect-emulator-2.15.0","args":["--logtostderr","-v=2","dev","--listen=localhost:50001","--config_dir=/home/user/studio/dataconnect","--enable_output_schema_extensions=true","--enable_output_generated_sdk=true"],"optionalArgs":["listen","config_dir","enable_output_schema_extensions","enable_output_generated_sdk"],"joinArgs":true,"shell":false,"port":9399} {"metadata":{"emulator":{"name":"dataconnect"},"message":"Starting Data Connect Emulator with command {\"binary\":\"/home/user/.cache/firebase/emulators/dataconnect-emulator-2.15.0\",\"args\":[\"--logtostderr\",\"-v=2\",\"dev\",\"--listen=localhost:50001\",\"--config_dir=/home/user/studio/dataconnect\",\"--enable_output_schema_extensions=true\",\"--enable_output_generated_sdk=true\"],\"optionalArgs\":[\"listen\",\"config_dir\",\"enable_output_schema_extensions\",\"enable_output_generated_sdk\"],\"joinArgs\":true,\"shell\":false,\"port\":9399}"}}
+[info] i  dataconnect: Data Connect Emulator logging to dataconnect-debug.log {"metadata":{"emulator":{"name":"dataconnect"},"message":"Data Connect Emulator logging to dataconnect-debug.log"}}
+[debug] [2025-10-25T20:20:27.478Z] I1025 20:20:27.474024     381 load.go:31] Reloading schema and connectors...
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I1025 20:20:27.474024     381 load.go:31] Reloading schema and connectors...\n"}}
+[debug] [2025-10-25T20:20:27.570Z] W1025 20:20:27.569464     381 control.go:68] [/emulator/studio 7e80] connector "example" has errors: example/queries.gql:34:21: Field "receiverId_expr" is not defined by type "Message_Filter". Did you mean "receiverId" or "receiver"?
+
+sources: example/queries.gql [883B] 
+I1025 20:20:27.569870     381 control.go:94] [/emulator/studio 7e80] UpdateResources(): done
+Main schema: sources: schema/schema.gql [741B] 
+Connector "example": sources: example/queries.gql [883B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"W1025 20:20:27.569464     381 control.go:68] [/emulator/studio 7e80] connector \"example\" has errors: example/queries.gql:34:21: Field \"receiverId_expr\" is not defined by type \"Message_Filter\". Did you mean \"receiverId\" or \"receiver\"?\n\nsources: example/queries.gql [883B] \nI1025 20:20:27.569870     381 control.go:94] [/emulator/studio 7e80] UpdateResources(): done\nMain schema: sources: schema/schema.gql [741B] \nConnector \"example\": sources: example/queries.gql [883B] \n"}}
+[debug] [2025-10-25T20:20:27.581Z] E1025 20:20:27.573896     381 load.go:73] Could not load sources: 
+Errors: example/queries.gql:34:21: Field "receiverId_expr" is not defined by type "Message_Filter". Did you mean "receiverId" or "receiver"?
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"E1025 20:20:27.573896     381 load.go:73] Could not load sources: \nErrors: example/queries.gql:34:21: Field \"receiverId_expr\" is not defined by type \"Message_Filter\". Did you mean \"receiverId\" or \"receiver\"?\n"}}
+[debug] [2025-10-25T20:20:27.588Z] I1025 20:20:27.586925     381 collector.go:107] schema extensions wrote into "/home/user/studio/dataconnect/.dataconnect/schema"
+Generated sources: main/relation.gql [23641B] main/query.gql [6300B] main/mutation.gql [17049B] main/implicit.gql [2822B] main/input.gql [45753B] prelude.gql [73219B] 
+I1025 20:20:27.587018     381 load.go:74] Finished reloading
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I1025 20:20:27.586925     381 collector.go:107] schema extensions wrote into \"/home/user/studio/dataconnect/.dataconnect/schema\"\nGenerated sources: main/relation.gql [23641B] main/query.gql [6300B] main/mutation.gql [17049B] main/implicit.gql [2822B] main/input.gql [45753B] prelude.gql [73219B] \nI1025 20:20:27.587018     381 load.go:74] Finished reloading\n"}}
+[debug] [2025-10-25T20:20:27.622Z] I1025 20:20:27.621599     381 dev.go:102] Listening on address (HTTP + gRPC): 127.0.0.1:50001
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I1025 20:20:27.621599     381 dev.go:102] Listening on address (HTTP + gRPC): 127.0.0.1:50001\n"}}
+[debug] [2025-10-25T20:20:27.717Z] I1025 20:20:27.715330     381 engine.go:169] [/emulator/studio 7e80] ExecuteGraphqlRead IntrospectionQuery: succeeded. 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I1025 20:20:27.715330     381 engine.go:169] [/emulator/studio 7e80] ExecuteGraphqlRead IntrospectionQuery: succeeded. \n"}}
+[info] [Firebase Plugin] Stopping Data Connect toolkit
+[warn] ⚠  Data Connect Emulator has exited upon receiving signal: SIGINT 
+[debug] [2025-10-25T20:46:53.918Z] [Firebase Plugin] Activating Firebase extension.
+[debug] [2025-10-25T20:47:05.653Z] [Firebase Plugin] requireAuthWrapper
+[debug] [2025-10-25T20:47:05.656Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-25T20:47:05.657Z] > authorizing via signed-in user (arian.rad7878@gmail.com)
+[debug] [2025-10-25T20:47:05.663Z] Checked if tokens are valid: true, expires at: 1761427207118
+[debug] [2025-10-25T20:47:05.664Z] Checked if tokens are valid: true, expires at: 1761427207118
+[debug] [2025-10-25T20:47:05.665Z] [Firebase Plugin] User found:  arian.rad7878@gmail.com
+[info] [Firebase Plugin] (Core:Project) New user detected, fetching projects
+[debug] [2025-10-25T20:47:05.669Z] Checked if tokens are valid: true, expires at: 1761427207118
+[debug] [2025-10-25T20:47:05.672Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=1000
+[debug] [2025-10-25T20:47:05.736Z] [Firebase Plugin] VSCode notification server listening on port 40001
+[info] [Firebase Plugin] Starting Data Connect toolkit (version 2.15.0) on port 50001
+[debug] [2025-10-25T20:47:09.282Z] W1025 20:47:09.277988    1058 control.go:68] [/emulator/studio f1a1] connector "example" has errors: example/queries.gql:34:21: Field "receiverId_expr" is not defined by type "Message_Filter". Did you mean "receiverId" or "receiver"?
+
+sources: example/queries.gql [883B] 
+I1025 20:47:09.278359    1058 control.go:94] [/emulator/studio f1a1] UpdateResources(): done
+Main schema: sources: schema/schema.gql [741B] 
+Connector "example": sources: example/queries.gql [883B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"W1025 20:47:09.277988    1058 control.go:68] [/emulator/studio f1a1] connector \"example\" has errors: example/queries.gql:34:21: Field \"receiverId_expr\" is not defined by type \"Message_Filter\". Did you mean \"receiverId\" or \"receiver\"?\n\nsources: example/queries.gql [883B] \nI1025 20:47:09.278359    1058 control.go:94] [/emulator/studio f1a1] UpdateResources(): done\nMain schema: sources: schema/schema.gql [741B] \nConnector \"example\": sources: example/queries.gql [883B] \n"}}
+[debug] [2025-10-25T20:47:09.284Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2025-10-25T20:47:09.286Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2025-10-25T20:47:09.288Z] Starting Data Connect Emulator with command {"binary":"/home/user/.cache/firebase/emulators/dataconnect-emulator-2.15.0","args":["--logtostderr","-v=2","dev","--listen=localhost:50001","--config_dir=/home/user/studio/dataconnect","--enable_output_schema_extensions=true","--enable_output_generated_sdk=true"],"optionalArgs":["listen","config_dir","enable_output_schema_extensions","enable_output_generated_sdk"],"joinArgs":true,"shell":false,"port":9399} {"metadata":{"emulator":{"name":"dataconnect"},"message":"Starting Data Connect Emulator with command {\"binary\":\"/home/user/.cache/firebase/emulators/dataconnect-emulator-2.15.0\",\"args\":[\"--logtostderr\",\"-v=2\",\"dev\",\"--listen=localhost:50001\",\"--config_dir=/home/user/studio/dataconnect\",\"--enable_output_schema_extensions=true\",\"--enable_output_generated_sdk=true\"],\"optionalArgs\":[\"listen\",\"config_dir\",\"enable_output_schema_extensions\",\"enable_output_generated_sdk\"],\"joinArgs\":true,\"shell\":false,\"port\":9399}"}}
+[info] i  dataconnect: Data Connect Emulator logging to dataconnect-debug.log {"metadata":{"emulator":{"name":"dataconnect"},"message":"Data Connect Emulator logging to dataconnect-debug.log"}}
+[debug] [2025-10-25T20:47:09.611Z] I1025 20:47:09.547635    1063 load.go:31] Reloading schema and connectors...
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I1025 20:47:09.547635    1063 load.go:31] Reloading schema and connectors...\n"}}
+[debug] [2025-10-25T20:47:09.997Z] W1025 20:47:09.921083    1063 control.go:68] [/emulator/studio 5e8b] connector "example" has errors: example/queries.gql:34:21: Field "receiverId_expr" is not defined by type "Message_Filter". Did you mean "receiverId" or "receiver"?
+
+sources: example/queries.gql [883B] 
+I1025 20:47:09.921165    1063 control.go:94] [/emulator/studio 5e8b] UpdateResources(): done
+Main schema: sources: schema/schema.gql [741B] 
+Connector "example": sources: example/queries.gql [883B] 
+E1025 20:47:09.926969    1063 load.go:73] Could not load sources: 
+Errors: example/queries.gql:34:21: Field "receiverId_expr" is not defined by type "Message_Filter". Did you mean "receiverId" or "receiver"?
+I1025 20:47:09.930221    1063 collector.go:107] schema extensions wrote into "/home/user/studio/dataconnect/.dataconnect/schema"
+Generated sources: main/mutation.gql [17049B] prelude.gql [73219B] main/implicit.gql [2822B] main/input.gql [45753B] main/relation.gql [23641B] main/query.gql [6300B] 
+I1025 20:47:09.955388    1063 load.go:74] Finished reloading
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"W1025 20:47:09.921083    1063 control.go:68] [/emulator/studio 5e8b] connector \"example\" has errors: example/queries.gql:34:21: Field \"receiverId_expr\" is not defined by type \"Message_Filter\". Did you mean \"receiverId\" or \"receiver\"?\n\nsources: example/queries.gql [883B] \nI1025 20:47:09.921165    1063 control.go:94] [/emulator/studio 5e8b] UpdateResources(): done\nMain schema: sources: schema/schema.gql [741B] \nConnector \"example\": sources: example/queries.gql [883B] \nE1025 20:47:09.926969    1063 load.go:73] Could not load sources: \nErrors: example/queries.gql:34:21: Field \"receiverId_expr\" is not defined by type \"Message_Filter\". Did you mean \"receiverId\" or \"receiver\"?\nI1025 20:47:09.930221    1063 collector.go:107] schema extensions wrote into \"/home/user/studio/dataconnect/.dataconnect/schema\"\nGenerated sources: main/mutation.gql [17049B] prelude.gql [73219B] main/implicit.gql [2822B] main/input.gql [45753B] main/relation.gql [23641B] main/query.gql [6300B] \nI1025 20:47:09.955388    1063 load.go:74] Finished reloading\n"}}
+[debug] [2025-10-25T20:47:10.015Z] I1025 20:47:10.009786    1063 dev.go:102] Listening on address (HTTP + gRPC): 127.0.0.1:50001
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I1025 20:47:10.009786    1063 dev.go:102] Listening on address (HTTP + gRPC): 127.0.0.1:50001\n"}}
+[debug] [2025-10-25T20:47:10.045Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2025-10-25T20:47:10.045Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[debug] [2025-10-25T20:47:10.476Z] I1025 20:47:10.427984    1063 engine.go:169] [/emulator/studio 5e8b] ExecuteGraphqlRead IntrospectionQuery: succeeded. 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I1025 20:47:10.427984    1063 engine.go:169] [/emulator/studio 5e8b] ExecuteGraphqlRead IntrospectionQuery: succeeded. \n"}}
+[debug] [2025-10-25T20:53:44.195Z] [Firebase Plugin] Value of process.env.MONOSPACE_ENV: true
+[debug] [2025-10-25T20:53:44.196Z] [Firebase Plugin] requireAuthWrapper
+[debug] [2025-10-25T20:53:44.197Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-25T20:53:44.198Z] > authorizing via signed-in user (arian.rad7878@gmail.com)
+[debug] [2025-10-25T20:53:44.199Z] Checked if tokens are valid: true, expires at: 1761427207118
+[debug] [2025-10-25T20:53:44.199Z] [Firebase Plugin] User found:  arian.rad7878@gmail.com
+[info] [Firebase Plugin] (Core:Project) New user detected, fetching projects
+[debug] [2025-10-25T20:53:44.200Z] Checked if tokens are valid: true, expires at: 1761427207118
+[debug] [2025-10-25T20:53:44.224Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=1000
+[debug] [2025-10-25T20:53:44.273Z] [Firebase Plugin] Value of process.env.MONOSPACE_ENV: true
+[debug] [2025-10-25T20:53:44.274Z] [Firebase Plugin] requireAuthWrapper
+[debug] [2025-10-25T20:53:44.275Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-25T20:53:44.275Z] > authorizing via signed-in user (arian.rad7878@gmail.com)
+[debug] [2025-10-25T20:53:44.277Z] Emulator locator file path: /tmp/hub-studio-wtjb2.json
+[debug] [2025-10-25T20:53:44.280Z] Checked if tokens are valid: true, expires at: 1761427207118
+[debug] [2025-10-25T20:53:44.281Z] [Firebase Plugin] User found:  arian.rad7878@gmail.com
+[info] [Firebase Plugin] (Core:Project) New user detected, fetching projects
+[debug] [2025-10-25T20:53:44.283Z] Checked if tokens are valid: true, expires at: 1761427207118
+[debug] [2025-10-25T20:53:44.284Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=1000
+[debug] [2025-10-25T20:53:44.672Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2025-10-25T20:53:44.672Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[debug] [2025-10-25T20:53:44.713Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2025-10-25T20:53:44.713Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]

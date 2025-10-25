@@ -1,14 +1,14 @@
-I1025 14:08:01.728114   16394 load.go:31] Reloading schema and connectors...
-W1025 14:08:01.854140   16394 control.go:68] [/emulator/studio c4ba] connector "example" has errors: example/queries.gql:34:21: Field "receiverId_expr" is not defined by type "Message_Filter". Did you mean "receiverId" or "receiver"?
+I1025 20:47:09.547635    1063 load.go:31] Reloading schema and connectors...
+W1025 20:47:09.921083    1063 control.go:68] [/emulator/studio 5e8b] connector "example" has errors: example/queries.gql:34:21: Field "receiverId_expr" is not defined by type "Message_Filter". Did you mean "receiverId" or "receiver"?
 
 sources: example/queries.gql [883B] 
-I1025 14:08:01.854379   16394 control.go:94] [/emulator/studio c4ba] UpdateResources(): done
+I1025 20:47:09.921165    1063 control.go:94] [/emulator/studio 5e8b] UpdateResources(): done
 Main schema: sources: schema/schema.gql [741B] 
 Connector "example": sources: example/queries.gql [883B] 
-E1025 14:08:01.864682   16394 load.go:73] Could not load sources: 
+E1025 20:47:09.926969    1063 load.go:73] Could not load sources: 
 Errors: example/queries.gql:34:21: Field "receiverId_expr" is not defined by type "Message_Filter". Did you mean "receiverId" or "receiver"?
-I1025 14:08:01.867274   16394 collector.go:107] schema extensions wrote into "/home/user/studio/dataconnect/.dataconnect/schema"
-Generated sources: prelude.gql [73219B] main/input.gql [45753B] main/relation.gql [23641B] main/query.gql [6300B] main/mutation.gql [17049B] main/implicit.gql [2822B] 
-I1025 14:08:01.870067   16394 load.go:74] Finished reloading
-I1025 14:08:01.895980   16394 dev.go:102] Listening on address (HTTP + gRPC): 127.0.0.1:50001
-I1025 14:08:02.088324   16394 engine.go:169] [/emulator/studio c4ba] ExecuteGraphqlRead IntrospectionQuery: succeeded. 
+I1025 20:47:09.930221    1063 collector.go:107] schema extensions wrote into "/home/user/studio/dataconnect/.dataconnect/schema"
+Generated sources: main/mutation.gql [17049B] prelude.gql [73219B] main/implicit.gql [2822B] main/input.gql [45753B] main/relation.gql [23641B] main/query.gql [6300B] 
+I1025 20:47:09.955388    1063 load.go:74] Finished reloading
+I1025 20:47:10.009786    1063 dev.go:102] Listening on address (HTTP + gRPC): 127.0.0.1:50001
+I1025 20:47:10.427984    1063 engine.go:169] [/emulator/studio 5e8b] ExecuteGraphqlRead IntrospectionQuery: succeeded. 
