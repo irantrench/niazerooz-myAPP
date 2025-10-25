@@ -156,6 +156,8 @@ export default function PostAdPage() {
 
         setIsLoading(false);
         setCurrentStep(steps.length - 1);
+        toast({ title: "آگهی با موفقیت ثبت شد", description: "آگهی شما اکنون در لیست آگهی‌ها قابل مشاهده است."});
+        router.push('/my-ads');
     } catch (error) {
         setIsLoading(false);
         console.error("Error submitting ad:", error);

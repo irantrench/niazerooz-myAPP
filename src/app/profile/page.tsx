@@ -69,7 +69,11 @@ export default function ProfilePage() {
         {/* Page Title */}
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-xl font-headline font-bold">نیاز روز من</h1>
-          <ChevronLeft className="w-6 h-6 text-muted-foreground" />
+          <Link href="/profile/edit-profile">
+            <Button variant="ghost" size="icon">
+              <PenSquare className="w-5 h-5 text-muted-foreground" />
+            </Button>
+          </Link>
         </div>
         
         {loading ? (

@@ -183,8 +183,10 @@ export default function MyAdsPage() {
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>اقدامات</DropdownMenuLabel>
                         <DropdownMenuItem>
+                          <Link href={`/post-ad?edit=${ad.id}`} className="flex items-center w-full">
                             <FilePenLine className="h-4 w-4 ml-2"/>
                             ویرایش
+                          </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem 
                           className="text-red-500 focus:text-red-500 focus:bg-red-50 dark:focus:bg-red-900/40"
