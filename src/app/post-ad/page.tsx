@@ -9,7 +9,6 @@ import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -24,15 +23,28 @@ import { useToast } from '@/hooks/use-toast';
 import CategoryBrowser from '@/components/category-browser';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useAuth } from '@/context/auth-context';
+import { useRouter } from 'next/navigation';
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { ref, uploadString, getDownloadURL } from "firebase/storage";
+import { db, storage } from '@/lib/firebase';
 
 const adSchema = z.object({
   category: z.string().min(1, 'انتخاب دسته‌بندی الزامی است.'),
-  title: z.string().min(5, 'عنوان باید حداقل ۵ کاراکتر باشد.'),
+  title: z.string().min(5, 'عنوان باید حداقل ۵ کاراکتر باشد.').max(100, 'عنوان نمی‌تواند بیشتر از ۱۰۰ کاراکتر باشد.'),
   description: z.string().min(20, 'توضیحات باید حداقل ۲۰ کاراکتر باشد.'),
-  priceType: z.enum(['fixed', 'negotiable', 'free']),
+  priceType: z.enum(['fixed', 'negotiable', 'free'], { required_error: 'نوع قیمت را مشخص کنید' }),
   price: z.string().optional(),
-  images: z.array(z.string()).optional(),
+}).refine(data => {
+    if (data.priceType === 'fixed') {
+        return data.price && data.price.length > 0 && !isNaN(Number(data.price));
+    }
+    return true;
+}, {
+    message: 'برای قیمت مقطوع، وارد کردن عدد الزامی است.',
+    path: ['price'],
 });
+
 
 type AdFormValues = z.infer<typeof adSchema>;
 
@@ -51,6 +63,8 @@ export default function PostAdPage() {
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+  const { user, loading: authLoading } = useAuth();
+  const router = useRouter();
 
   const form = useForm<AdFormValues>({
     resolver: zodResolver(adSchema),
@@ -60,12 +74,21 @@ export default function PostAdPage() {
       description: '',
       priceType: 'fixed',
       price: '',
-      images: [],
     },
     mode: 'onChange'
   });
 
   const selectedCategory = form.watch('category');
+
+  if (authLoading) {
+    return <div className="flex justify-center items-center h-screen"><Loader2 className="w-12 h-12 animate-spin text-primary" /></div>;
+  }
+
+  if (!user) {
+    toast({ title: "نیاز به ورود", description: "برای ثبت آگهی، لطفا ابتدا وارد حساب کاربری خود شوید.", variant: "destructive" });
+    router.push('/login');
+    return null;
+  }
 
   const handleCategorySelect = (categoryName: string) => {
     form.setValue('category', categoryName, { shouldValidate: true, shouldDirty: true });
@@ -83,13 +106,8 @@ export default function PostAdPage() {
         break;
       case 2:
         isValid = await form.trigger(['priceType', 'price']);
-        if (form.getValues('priceType') === 'fixed' && !form.getValues('price')) {
-          form.setError('price', { type: 'manual', message: 'وارد کردن قیمت الزامی است.' });
-          isValid = false;
-        }
         break;
       case 3:
-        form.setValue('images', uploadedImages);
         isValid = true; // Media is optional
         break;
     }
@@ -108,35 +126,66 @@ export default function PostAdPage() {
   };
   
   const onSubmit = async (data: AdFormValues) => {
+    if (!user) {
+        toast({ variant: 'destructive', title: 'خطا', description: 'برای ثبت آگهی باید وارد شده باشید.' });
+        return;
+    }
     setIsLoading(true);
-    console.log("Submitting form data:", data);
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    setIsLoading(false);
-    setCurrentStep(steps.length - 1);
+    
+    try {
+        const imageUrls: string[] = [];
+        // Upload images to Firebase Storage
+        for (const image of uploadedImages) {
+            const imageName = `${user.uid}-${Date.now()}-${Math.random()}`;
+            const storageRef = ref(storage, `ads/${imageName}`);
+            const uploadResult = await uploadString(storageRef, image, 'data_url');
+            const downloadUrl = await getDownloadURL(uploadResult.ref);
+            imageUrls.push(downloadUrl);
+        }
+
+        // Add ad data to Firestore
+        await addDoc(collection(db, 'ads'), {
+            ...data,
+            price: data.priceType === 'fixed' ? Number(data.price) : 0,
+            images: imageUrls,
+            userId: user.uid,
+            userDisplayName: user.displayName || user.email,
+            createdAt: serverTimestamp(),
+            status: 'active' // or 'pending' for review
+        });
+
+        setIsLoading(false);
+        setCurrentStep(steps.length - 1);
+    } catch (error) {
+        setIsLoading(false);
+        console.error("Error submitting ad:", error);
+        toast({ variant: 'destructive', title: 'خطا در ثبت آگهی', description: 'مشکلی پیش آمده، لطفا دوباره تلاش کنید.' });
+    }
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
-      const newImages: string[] = [];
-      Array.from(files).forEach(file => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          if (e.target?.result) {
-            newImages.push(e.target.result as string);
-            if (newImages.length === files.length) {
-              if (uploadedImages.length + newImages.length <= 8) {
-                setUploadedImages([...uploadedImages, ...newImages]);
-              } else {
-                 toast({ variant: 'destructive', title: 'محدودیت تعداد تصاویر', description: `شما فقط می‌توانید ${8 - uploadedImages.length} تصویر دیگر اضافه کنید.` });
-              }
+        const currentImageCount = uploadedImages.length;
+        if (currentImageCount >= 8) {
+            toast({ variant: 'destructive', title: 'محدودیت تعداد تصاویر', description: `شما به حداکثر تعداد (۸) تصویر رسیده‌اید.` });
+            return;
+        }
+
+        const filesToProcess = Array.from(files).slice(0, 8 - currentImageCount);
+        
+        filesToProcess.forEach(file => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+            if (e.target?.result) {
+                setUploadedImages(prev => [...prev, e.target!.result as string]);
             }
-          }
-        };
-        reader.readAsDataURL(file);
-      });
+            };
+            reader.readAsDataURL(file);
+        });
     }
   };
+
 
   const removeImage = (index: number) => {
     setUploadedImages(uploadedImages.filter((_, i) => i !== index));
@@ -265,7 +314,7 @@ export default function PostAdPage() {
                           <FormItem>
                             <FormLabel>مبلغ (تومان)</FormLabel>
                             <FormControl>
-                              <Input type="number" dir="ltr" placeholder="5,000,000" {...field} />
+                              <Input type="number" dir="ltr" placeholder="5000000" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>

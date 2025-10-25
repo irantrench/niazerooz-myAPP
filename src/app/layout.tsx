@@ -3,6 +3,7 @@ import { Poppins, PT_Sans } from 'next/font/google';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import BottomNav from '@/components/bottom-nav';
+import { AuthProvider } from '@/context/auth-context';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -32,13 +33,15 @@ export default function RootLayout({
   return (
     <html lang="fa" dir="rtl" className={`${poppins.variable} ${ptSans.variable} scroll-smooth`}>
       <body className="font-body bg-background antialiased aurora-background">
-        <div className="flex flex-col min-h-screen">
-          <main className="flex-grow pb-20">
-            {children}
-          </main>
-          <Toaster />
-          <BottomNav />
-        </div>
+        <AuthProvider>
+          <div className="flex flex-col min-h-screen">
+            <main className="flex-grow pb-20">
+              {children}
+            </main>
+            <Toaster />
+            <BottomNav />
+          </div>
+        </AuthProvider>
       </body>
     </html>
   );

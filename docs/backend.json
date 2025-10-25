@@ -1,0 +1,38 @@
+{
+    "collections": {
+        "users": {
+            "schema": {
+                "uid": "string",
+                "displayName": "string",
+                "email": "string",
+                "photoURL": "string",
+                "createdAt": "timestamp"
+            },
+            "rules": {
+                "read": "auth.uid != null",
+                "write": "auth.uid == resource.data.uid"
+            }
+        },
+        "ads": {
+            "schema": {
+                "title": "string",
+                "description": "string",
+                "priceType": "string",
+                "price": "number",
+                "category": "string",
+                "location": "string",
+                "images": "array",
+                "userId": "string",
+                "userDisplayName": "string",
+                "createdAt": "timestamp",
+                "status": "string"
+            },
+            "rules": {
+                "read": "true",
+                "create": "request.auth.uid != null",
+                "update": "request.auth.uid == resource.data.userId",
+                "delete": "request.auth.uid == resource.data.userId"
+            }
+        }
+    }
+}
