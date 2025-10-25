@@ -1,4 +1,3 @@
-
 // IMPORTANT: These values are taken directly from your Firebase project settings.
 
 export const firebaseConfig = {
