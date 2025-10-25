@@ -63,6 +63,12 @@ const nextConfig: NextConfig = {
         hostname: 'studio-wtjb2.appspot.com',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'studio-wtjb2.firebasestorage.app',
+        port: '',
+        pathname: '/**',
       }
     ],
   },
