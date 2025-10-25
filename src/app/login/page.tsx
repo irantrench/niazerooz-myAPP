@@ -27,7 +27,7 @@ const loginSchema = z.object({
 type LoginSchemaType = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
-  const { login, loginWithGoogle, loading, error } = useAuth();
+  const { login, loginWithGoogle, loading } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
 

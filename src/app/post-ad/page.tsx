@@ -48,24 +48,6 @@ const adSchema = z.object({
       }
       return files.length <= 8;
     }, "حداکثر 8 تصویر می‌توانید انتخاب کنید.")
-    .refine((files) => {
-      if (!files) {
-        return true;
-      }
-      
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        if (file.length > MAX_FILE_SIZE) {
-          return false;
-        }
-        
-        const fileType = file.substring("data:".length, file.indexOf(";base64"));
-        if (!ACCEPTED_IMAGE_TYPES.includes(fileType)) {
-          return false;
-        }
-      }
-      return true;
-    }, "فرمت تصاویر باید PNG, JPG, JPEG, GIF باشد و حجم آن‌ها کمتر از 5 مگابایت باشد.")
 });
 
 
@@ -109,13 +91,13 @@ export default function PostAdPage() {
 
   useEffect(() => {
     const fetchAdData = async () => {
-      if (adId) {
+      if (adId && user) {
         setIsLoading(true);
         setIsEditMode(true);
         try {
           const adDocRef = doc(db, 'ads', adId);
           const adDoc = await getDoc(adDocRef);
-          if (adDoc.exists()) {
+          if (adDoc.exists() && adDoc.data().userId === user.uid) {
             const adData = adDoc.data() as Ad;
             form.setValue('category', adData.category);
             form.setValue('title', adData.title);
@@ -125,7 +107,7 @@ export default function PostAdPage() {
             setUploadedImages(adData.images || []);
             form.setValue('images', adData.images || []);
           } else {
-            toast({ variant: 'destructive', title: 'آگهی یافت نشد', description: 'آگهی مورد نظر برای ویرایش پیدا نشد.' });
+            toast({ variant: 'destructive', title: 'خطا', description: 'آگهی یافت نشد یا شما مجوز ویرایش آن را ندارید.' });
             router.push('/my-ads');
           }
         } catch (error) {
@@ -137,8 +119,10 @@ export default function PostAdPage() {
       }
     };
 
-    fetchAdData();
-  }, [adId, form, router, toast]);
+    if (!authLoading) {
+      fetchAdData();
+    }
+  }, [adId, user, authLoading, form, router, toast]);
 
   if (authLoading) {
     return <div className="flex justify-center items-center h-screen"><Loader2 className="w-12 h-12 animate-spin text-primary" /></div>;
@@ -194,13 +178,18 @@ export default function PostAdPage() {
     
     try {
         const imageUrls: string[] = [];
-        // Upload images to Firebase Storage
+        // Upload new images to Firebase Storage
         for (const image of uploadedImages) {
-            const imageName = `${user.uid}-${Date.now()}-${Math.random()}`;
-            const storageRef = ref(storage, `ads/${imageName}`);
-            const uploadResult = await uploadString(storageRef, image, 'data_url');
-            const downloadUrl = await getDownloadURL(uploadResult.ref);
-            imageUrls.push(downloadUrl);
+           // check if image is a data url, if not it's an existing image url
+            if(image.startsWith('data:')){
+                const imageName = `${user.uid}-${Date.now()}-${Math.random()}`;
+                const storageRef = ref(storage, `ads/${imageName}`);
+                const uploadResult = await uploadString(storageRef, image, 'data_url');
+                const downloadUrl = await getDownloadURL(uploadResult.ref);
+                imageUrls.push(downloadUrl);
+            } else {
+                imageUrls.push(image);
+            }
         }
 
         const adData = {
@@ -256,12 +245,21 @@ export default function PostAdPage() {
         const filesToProcess = Array.from(files).slice(0, 8 - currentImageCount);
         
         filesToProcess.forEach(file => {
+             if (file.size > MAX_FILE_SIZE) {
+                toast({ variant: 'destructive', title: 'حجم فایل زیاد است', description: `حداکثر حجم مجاز برای هر تصویر ${MAX_FILE_SIZE / 1000000} مگابایت است.` });
+                return;
+            }
+             if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
+                toast({ variant: 'destructive', title: 'فرمت فایل نامعتبر', description: `فرمت‌های مجاز: ${ACCEPTED_IMAGE_TYPES.join(', ')}` });
+                return;
+            }
+
             const reader = new FileReader();
             reader.onload = (e) => {
             if (e.target?.result) {
                 const result = e.target.result as string;
                 setUploadedImages(prev => [...prev, result]);
-                form.setValue('images', [...uploadedImages, result]);
+                form.setValue('images', [...uploadedImages, result], { shouldValidate: true });
             }
             };
             reader.readAsDataURL(file);
@@ -273,7 +271,7 @@ export default function PostAdPage() {
   const removeImage = (index: number) => {
     const newUploadedImages = uploadedImages.filter((_, i) => i !== index);
     setUploadedImages(newUploadedImages);
-    form.setValue('images', newUploadedImages);
+    form.setValue('images', newUploadedImages, { shouldValidate: true });
   };
 
   const progress = ((currentStep) / (steps.length - 2)) * 100;
@@ -284,7 +282,7 @@ export default function PostAdPage() {
         <CardHeader>
           <CardTitle className="text-center text-2xl font-headline flex items-center justify-center gap-2">
             <StepIcon step={steps[currentStep]} />
-            {steps[currentStep].title}
+            {isEditMode ? `ویرایش: ${steps[currentStep].title}` : steps[currentStep].title}
           </CardTitle>
           {currentStep < steps.length - 1 && (
              <Progress value={progress} className="w-full mt-4" />
@@ -444,19 +442,30 @@ export default function PostAdPage() {
                       </div>
                     </div>
                   )}
+                   <FormField
+                      control={form.control}
+                      name="images"
+                      render={() => (
+                        <FormItem>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                 </div>
               )}
 
               {currentStep === 4 && (
                  <div className="text-center py-10 animate-in fade-in-50 zoom-in-95">
                     <Check className="w-16 h-16 text-green-500 mx-auto mb-4 bg-green-100 dark:bg-green-900/50 rounded-full p-2" />
-                    <h2 className="text-2xl font-bold mb-2">آگهی شما با موفقیت ثبت شد!</h2>
-                    <p className="text-muted-foreground mb-6">آگهی شما پس از تایید توسط مدیران، در سایت نمایش داده خواهد شد.</p>
+                    <h2 className="text-2xl font-bold mb-2">{isEditMode ? 'آگهی شما با موفقیت ویرایش شد!' : 'آگهی شما با موفقیت ثبت شد!'}</h2>
+                    <p className="text-muted-foreground mb-6">می‌توانید آگهی خود را در بخش "آگهی‌های من" مشاهده کنید.</p>
                     <div className="flex gap-4 justify-center">
                         <Button onClick={() => {
                           form.reset();
                           setUploadedImages([]);
                           setCurrentStep(0);
+                          setIsEditMode(false);
+                          router.replace('/post-ad');
                         }}>ثبت آگهی جدید</Button>
                         <Link href="/my-ads">
                            <Button variant="outline">مشاهده آگهی‌های من</Button>

@@ -13,26 +13,21 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Heart, Filter, Loader2 } from 'lucide-react';
 import type { Ad } from '@/lib/types';
-import { collection, getDocs, orderBy, query, limit, where } from 'firebase/firestore';
+import { collection, getDocs, orderBy, query, limit } from 'firebase/firestore';
 import { db } from '@/firebase/client';
 import { useEffect, useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
-import { Input } from '@/components/ui/input';
 
 export default function ListingsPage() {
   const [listings, setListings] = useState<Ad[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
   const { toast } = useToast();
 
   useEffect(() => {
     const fetchListings = async () => {
       setLoading(true);
       try {
-        let q = query(collection(db, "ads"), orderBy("createdAt", "desc"), limit(20));
-        if (searchQuery) {
-          q = query(q, where('title', '>=', searchQuery), where('title', '<=', searchQuery + '\uf8ff'));
-        }
+        const q = query(collection(db, "ads"), orderBy("createdAt", "desc"), limit(20));
         const querySnapshot = await getDocs(q);
         const ads = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Ad));
         setListings(ads);
@@ -49,7 +44,7 @@ export default function ListingsPage() {
     };
 
     fetchListings();
-  }, [searchQuery, toast]);
+  }, [toast]);
   
   const getPriceDisplay = (listing: Ad) => {
     if (listing.priceType === 'free') return 'رایگان';

@@ -50,7 +50,7 @@ export default function MyAdsPage() {
 
             setLoading(true);
             try {
-                const q = query(collection(db, "ads"), where("userId", "==", user.uid));
+                const q = query(collection(db, "ads"), where("userId", "==", user.uid), orderBy("createdAt", "desc"));
                 const querySnapshot = await getDocs(q);
                 const userAds = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Ad));
                 setAds(userAds);
@@ -163,7 +163,7 @@ export default function MyAdsPage() {
                     </Badge>
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
-                    {ad.priceType === 'fixed' ? `${Number(ad.price).toLocaleString('fa-IR')} تومان` : ad.priceType === 'negotiable' ? 'توافقی' : 'رایگان'}
+                    {ad.priceType === 'fixed' && ad.price ? `${Number(ad.price).toLocaleString('fa-IR')} تومان` : ad.priceType === 'negotiable' ? 'توافقی' : 'رایگان'}
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
                     {ad.createdAt?.seconds ? new Date(ad.createdAt.seconds * 1000).toLocaleDateString('fa-IR') : ''}

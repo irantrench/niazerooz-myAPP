@@ -29,7 +29,7 @@ type SignupSchemaType = z.infer<typeof signupSchema>;
 
 
 export default function SignupPage() {
-    const { signup, loginWithGoogle, loading, error } = useAuth();
+    const { signup, loginWithGoogle, loading } = useAuth();
     const router = useRouter();
     const { toast } = useToast();
 

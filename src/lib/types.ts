@@ -1,13 +1,7 @@
-import type { LucideIcon } from 'lucide-react';
 import type { Timestamp } from 'firebase/firestore';
 
-export interface Category {
-  name: string;
-  icon: LucideIcon;
-}
-
 export interface Ad {
-  id: string;
+  id?: string;
   title: string;
   description: string;
   priceType: 'fixed' | 'negotiable' | 'free';
@@ -17,8 +11,9 @@ export interface Ad {
   images?: string[];
   userId: string;
   userDisplayName: string;
-  createdAt: Timestamp;
   status: 'active' | 'pending' | 'expired';
+  createdAt: Timestamp;
+  updatedAt?: Timestamp;
 }
 
 export interface UserProfile {
@@ -26,5 +21,5 @@ export interface UserProfile {
   email: string | null;
   displayName: string | null;
   photoURL: string | null;
-  createdAt?: Timestamp;
+  createdAt: Timestamp;
 }
