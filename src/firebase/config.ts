@@ -1,4 +1,5 @@
 // IMPORTANT: These values are taken directly from your Firebase project settings.
+// This is the single source of truth for the Firebase configuration.
 
 export const firebaseConfig = {
   apiKey: "AIzaSyDGvMjhn1s94PH3NkiuVTWUP6st-BFwc5Y",

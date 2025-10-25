@@ -2,14 +2,13 @@
 
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { onAuthStateChanged, User, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc, getDoc, serverTimestamp, Timestamp, FieldValue } from 'firebase/firestore';
 import { auth, db } from '@/firebase/client';
-import type { UserProfile } from '@/lib/types';
 import { Loader2 } from 'lucide-react';
 
 interface AuthContextType {
   user: User | null;
-  userProfile: UserProfile | null;
+  userProfile: UserProfileType | null;
   loading: boolean;
   error: string | null;
   login: (email: string, password: string) => Promise<void>;
@@ -18,11 +17,19 @@ interface AuthContextType {
   loginWithGoogle: () => Promise<void>;
 }
 
+export interface UserProfileType {
+  uid: string;
+  displayName: string | null;
+  email: string | null;
+  photoURL: string | null;
+  createdAt: Timestamp | FieldValue | null;
+}
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfileType | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -34,15 +41,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const userDocRef = doc(db, 'users', user.uid);
         const userDoc = await getDoc(userDocRef);
         if (userDoc.exists()) {
-            setUserProfile(userDoc.data() as UserProfile);
+            const profile = userDoc.data() as UserProfileType;
+            setUserProfile(profile);
         } else {
             // Create a profile if it doesn't exist (e.g. for Google login)
-            const newUserProfile: UserProfile = {
+            const newUserProfile: UserProfileType = {
                 uid: user.uid,
                 displayName: user.displayName,
                 email: user.email,
                 photoURL: user.photoURL,
-                createdAt: serverTimestamp(),
+                createdAt: serverTimestamp()
             };
             await setDoc(userDocRef, newUserProfile);
             setUserProfile(newUserProfile);
@@ -62,9 +70,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setError(null);
     try {
       await signInWithEmailAndPassword(auth, email, password);
-    } catch (e: any) {
-      setError(e.message);
-      throw e;
+    } catch (error: any) {
+      let errorMessage = 'مشکلی در ورود به حساب کاربری پیش آمده است.';
+      if (error.code === 'auth/wrong-password') {
+        errorMessage = 'رمز عبور اشتباه است.';
+      } else if (error.code === 'auth/user-not-found') {
+        errorMessage = 'کاربری با این ایمیل یافت نشد.';
+      } else if (error.code === 'auth/invalid-credential') {
+        errorMessage = 'ایمیل یا رمز عبور نامعتبر است.'
+      }
+      setError(errorMessage);
+      throw new Error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -77,23 +93,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(userCredential.user, { displayName: fullName });
       
-      const newUserProfile: UserProfile = {
+      const newUserProfile: UserProfileType = {
         uid: userCredential.user.uid,
         displayName: fullName,
         email: email,
         photoURL: userCredential.user.photoURL,
+        createdAt: serverTimestamp()
       };
 
-      await setDoc(doc(db, 'users', userCredential.user.uid), {
-          ...newUserProfile,
-          createdAt: serverTimestamp()
-      });
-      // setUser(userCredential.user);
-      // setUserProfile(newUserProfile);
-
-    } catch (e: any) {
-      setError(e.message);
-      throw e;
+      await setDoc(doc(db, 'users', userCredential.user.uid), newUserProfile);
+      
+    } catch (error: any) {
+      let errorMessage = 'مشکلی در ثبت نام پیش آمده است.';
+      if (error.code === 'auth/email-already-in-use') {
+        errorMessage = 'این ایمیل قبلا ثبت شده است.';
+      } else if (error.code === 'auth/weak-password') {
+        errorMessage = 'رمز عبور ضعیف است. لطفا یک رمز عبور قوی‌تر انتخاب کنید.';
+      }
+      setError(errorMessage);
+      throw new Error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -105,11 +123,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
         const provider = new GoogleAuthProvider();
         await signInWithPopup(auth, provider);
-    } catch (e: any) {
-        setError(e.message);
-        throw e;
+    } catch (error: any) {
+        let errorMessage = 'مشکلی در ورود با گوگل پیش آمده است.';
+        if (error.code === 'auth/popup-closed-by-user') {
+          errorMessage = 'پنجره ورود با گوگل توسط شما بسته شد.'
+        }
+        setError(errorMessage);
+        throw new Error(errorMessage);
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
   }
 
@@ -118,16 +140,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setError(null);
     try {
       await signOut(auth);
-    } catch (e: any) {
-      setError(e.message);
-      throw e;
+    } catch (error: any) {
+      setError(error?.message || 'مشکلی در خروج از حساب کاربری پیش آمده است.');
+      throw new Error(error.message);
     } finally {
       setLoading(false);
     }
   };
   
   // A loading screen for the initial auth state check
-  if (loading) {
+  if (loading && !user) {
       return (
           <div className="w-full h-screen flex justify-center items-center bg-background">
               <Loader2 className="w-16 h-16 animate-spin text-primary" />

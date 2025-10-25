@@ -1,0 +1,43 @@
+mutation CreateUser @auth(level: USER, insecureReason: "This operation is safe to expose to all logged in users.") {
+  user_insert(data: {
+    email: "default@example.com"
+    username: "defaultuser"
+    createdAt_expr: "request.time"
+  })
+}
+
+query GetAdvertisements @auth(level: PUBLIC, insecureReason: "This operation is safe to expose to the public") {
+  advertisements {
+    id
+    title
+    description
+    price
+    location
+    category {
+      name
+    }
+    seller {
+      username
+    }
+  }
+}
+
+mutation AddFavorite($advertisementId: UUID!) @auth(level: USER) {
+  favorite_insert(data: {
+    userId_expr: "auth.uid"
+    advertisementId: $advertisementId
+    createdAt_expr: "request.time"
+  })
+}
+
+query GetMyMessages @auth(level: USER) {
+  messages(where: { receiverId_expr: "auth.uid" }) {
+    id
+    content
+    sender {
+      username
+    }
+    createdAt
+    readAt
+  }
+}

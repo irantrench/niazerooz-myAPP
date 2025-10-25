@@ -1,0 +1,552 @@
+extend type Mutation {
+  """
+  ✨ Insert a single `Advertisement` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  advertisement_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Advertisement_Data!
+  ): Advertisement_KeyOutput! @fdc_generated(from: "Advertisement", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `Category` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  category_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Category_Data!
+  ): Category_KeyOutput! @fdc_generated(from: "Category", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `Favorite` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  favorite_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Favorite_Data!
+  ): Favorite_KeyOutput! @fdc_generated(from: "Favorite", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `Message` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  message_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Message_Data!
+  ): Message_KeyOutput! @fdc_generated(from: "Message", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `User` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  user_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: User_Data!
+  ): User_KeyOutput! @fdc_generated(from: "User", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert `Advertisement` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  advertisement_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Advertisement_Data!]!
+  ): [Advertisement_KeyOutput!]! @fdc_generated(from: "Advertisement", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `Category` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  category_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Category_Data!]!
+  ): [Category_KeyOutput!]! @fdc_generated(from: "Category", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `Favorite` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  favorite_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Favorite_Data!]!
+  ): [Favorite_KeyOutput!]! @fdc_generated(from: "Favorite", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `Message` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  message_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Message_Data!]!
+  ): [Message_KeyOutput!]! @fdc_generated(from: "Message", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `User` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  user_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [User_Data!]!
+  ): [User_KeyOutput!]! @fdc_generated(from: "User", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert or update a single `Advertisement` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Advertisement`.
+  """
+  advertisement_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Advertisement_Data!
+  ): Advertisement_KeyOutput! @fdc_generated(from: "Advertisement", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `Category` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Category`.
+  """
+  category_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Category_Data!
+  ): Category_KeyOutput! @fdc_generated(from: "Category", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `Favorite` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Favorite`.
+  """
+  favorite_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Favorite_Data!
+  ): Favorite_KeyOutput! @fdc_generated(from: "Favorite", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `Message` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Message`.
+  """
+  message_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Message_Data!
+  ): Message_KeyOutput! @fdc_generated(from: "Message", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `User` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `User`.
+  """
+  user_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: User_Data!
+  ): User_KeyOutput! @fdc_generated(from: "User", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update `Advertisement` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Advertisement`.
+  """
+  advertisement_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Advertisement_Data!]!
+  ): [Advertisement_KeyOutput!]! @fdc_generated(from: "Advertisement", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `Category` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Category`.
+  """
+  category_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Category_Data!]!
+  ): [Category_KeyOutput!]! @fdc_generated(from: "Category", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `Favorite` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Favorite`.
+  """
+  favorite_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Favorite_Data!]!
+  ): [Favorite_KeyOutput!]! @fdc_generated(from: "Favorite", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `Message` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Message`.
+  """
+  message_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Message_Data!]!
+  ): [Message_KeyOutput!]! @fdc_generated(from: "Message", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `User` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `User`.
+  """
+  user_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [User_Data!]!
+  ): [User_KeyOutput!]! @fdc_generated(from: "User", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Update a single `Advertisement` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Advertisement` or `null` if not found.
+  """
+  advertisement_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Advertisement_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Advertisement_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Advertisement_Data!
+  ): Advertisement_KeyOutput @fdc_generated(from: "Advertisement", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `Category` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Category` or `null` if not found.
+  """
+  category_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Category_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Category_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Category_Data!
+  ): Category_KeyOutput @fdc_generated(from: "Category", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `Favorite` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Favorite` or `null` if not found.
+  """
+  favorite_update(
+    """
+    The key used to identify the object.
+    """
+    key: Favorite_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Favorite_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Favorite_Data!
+  ): Favorite_KeyOutput @fdc_generated(from: "Favorite", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `Message` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Message` or `null` if not found.
+  """
+  message_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Message_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Message_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Message_Data!
+  ): Message_KeyOutput @fdc_generated(from: "Message", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `User` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `User` or `null` if not found.
+  """
+  user_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: User_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: User_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: User_Data!
+  ): User_KeyOutput @fdc_generated(from: "User", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update `Advertisement` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  advertisement_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Advertisement_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Advertisement_Data!
+  ): Int! @fdc_generated(from: "Advertisement", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `Category` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  category_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Category_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Category_Data!
+  ): Int! @fdc_generated(from: "Category", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `Favorite` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  favorite_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Favorite_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Favorite_Data!
+  ): Int! @fdc_generated(from: "Favorite", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `Message` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  message_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Message_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Message_Data!
+  ): Int! @fdc_generated(from: "Message", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `User` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  user_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: User_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: User_Data!
+  ): Int! @fdc_generated(from: "User", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Delete a single `Advertisement` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  advertisement_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Advertisement_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Advertisement_FirstRow
+  ): Advertisement_KeyOutput @fdc_generated(from: "Advertisement", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `Category` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  category_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Category_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Category_FirstRow
+  ): Category_KeyOutput @fdc_generated(from: "Category", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `Favorite` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  favorite_delete(
+    """
+    The key used to identify the object.
+    """
+    key: Favorite_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Favorite_FirstRow
+  ): Favorite_KeyOutput @fdc_generated(from: "Favorite", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `Message` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  message_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Message_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Message_FirstRow
+  ): Message_KeyOutput @fdc_generated(from: "Message", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `User` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  user_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: User_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: User_FirstRow
+  ): User_KeyOutput @fdc_generated(from: "User", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete `Advertisement` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  advertisement_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Advertisement_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Advertisement", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `Category` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  category_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Category_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Category", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `Favorite` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  favorite_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Favorite_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Favorite", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `Message` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  message_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Message_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Message", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `User` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  user_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: User_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "User", purpose: DELETE_MULTIPLE)
+}

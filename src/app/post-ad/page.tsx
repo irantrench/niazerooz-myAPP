@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -24,10 +24,15 @@ import CategoryBrowser from '@/components/category-browser';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuth } from '@/context/auth-context';
-import { useRouter } from 'next/navigation';
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { useRouter, useSearchParams } from 'next/navigation';
+import { collection, addDoc, serverTimestamp, doc, getDoc, updateDoc } from "firebase/firestore";
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { db, storage } from '@/firebase/client';
+import type { Ad } from '@/lib/types';
+import StepIcon from '@/components/StepIcon';
+
+const MAX_FILE_SIZE = 5000000;
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
 
 const adSchema = z.object({
   category: z.string().min(1, 'انتخاب دسته‌بندی الزامی است.'),
@@ -35,36 +40,57 @@ const adSchema = z.object({
   description: z.string().min(20, 'توضیحات باید حداقل ۲۰ کاراکتر باشد.'),
   priceType: z.enum(['fixed', 'negotiable', 'free'], { required_error: 'نوع قیمت را مشخص کنید' }),
   price: z.string().optional(),
-}).refine(data => {
-    if (data.priceType === 'fixed') {
-        return data.price && data.price.length > 0 && !isNaN(Number(data.price));
-    }
-    return true;
-}, {
-    message: 'برای قیمت مقطوع، وارد کردن عدد الزامی است.',
-    path: ['price'],
+  images: z.array(z.string())
+    .optional()
+    .refine((files) => {
+      if (!files) {
+        return true;
+      }
+      return files.length <= 8;
+    }, "حداکثر 8 تصویر می‌توانید انتخاب کنید.")
+    .refine((files) => {
+      if (!files) {
+        return true;
+      }
+      
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (file.length > MAX_FILE_SIZE) {
+          return false;
+        }
+        
+        const fileType = file.substring("data:".length, file.indexOf(";base64"));
+        if (!ACCEPTED_IMAGE_TYPES.includes(fileType)) {
+          return false;
+        }
+      }
+      return true;
+    }, "فرمت تصاویر باید PNG, JPG, JPEG, GIF باشد و حجم آن‌ها کمتر از 5 مگابایت باشد.")
 });
 
 
 type AdFormValues = z.infer<typeof adSchema>;
 
 const steps = [
-  { id: 'category', title: 'انتخاب دسته‌بندی', icon: List },
-  { id: 'details', title: 'جزئیات آگهی', icon: FileText },
-  { id: 'pricing', title: 'قیمت‌گذاری', icon: DollarSign },
-  { id: 'media', title: 'تصاویر', icon: Camera },
-  { id: 'finish', title: 'پایان', icon: Check },
+  { id: 'category', title: 'انتخاب دسته‌بندی', icon: 'List' },
+  { id: 'details', title: 'جزئیات آگهی', icon: 'FileText' },
+  { id: 'pricing', title: 'قیمت‌گذاری', icon: 'DollarSign' },
+  { id: 'media', title: 'تصاویر', icon: 'Camera' },
+  { id: 'finish', title: 'پایان', icon: 'Check' },
 ];
 
 export default function PostAdPage() {
   const [currentStep, setCurrentStep] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
+  const [isEditMode, setIsEditMode] = useState(false);
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const adId = searchParams.get('edit');
 
   const form = useForm<AdFormValues>({
     resolver: zodResolver(adSchema),
@@ -74,11 +100,45 @@ export default function PostAdPage() {
       description: '',
       priceType: 'fixed',
       price: '',
+      images: [],
     },
     mode: 'onChange'
   });
 
   const selectedCategory = form.watch('category');
+
+  useEffect(() => {
+    const fetchAdData = async () => {
+      if (adId) {
+        setIsLoading(true);
+        setIsEditMode(true);
+        try {
+          const adDocRef = doc(db, 'ads', adId);
+          const adDoc = await getDoc(adDocRef);
+          if (adDoc.exists()) {
+            const adData = adDoc.data() as Ad;
+            form.setValue('category', adData.category);
+            form.setValue('title', adData.title);
+            form.setValue('description', adData.description);
+            form.setValue('priceType', adData.priceType);
+            form.setValue('price', adData.price ? String(adData.price) : '');
+            setUploadedImages(adData.images || []);
+            form.setValue('images', adData.images || []);
+          } else {
+            toast({ variant: 'destructive', title: 'آگهی یافت نشد', description: 'آگهی مورد نظر برای ویرایش پیدا نشد.' });
+            router.push('/my-ads');
+          }
+        } catch (error) {
+          console.error('Error fetching ad data:', error);
+          toast({ variant: 'destructive', title: 'خطا', description: 'مشکلی در دریافت اطلاعات آگهی پیش آمده است.' });
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchAdData();
+  }, [adId, form, router, toast]);
 
   if (authLoading) {
     return <div className="flex justify-center items-center h-screen"><Loader2 className="w-12 h-12 animate-spin text-primary" /></div>;
@@ -108,7 +168,7 @@ export default function PostAdPage() {
         isValid = await form.trigger(['priceType', 'price']);
         break;
       case 3:
-        isValid = true; // Media is optional
+        isValid = await form.trigger('images');
         break;
     }
 
@@ -143,25 +203,44 @@ export default function PostAdPage() {
             imageUrls.push(downloadUrl);
         }
 
-        // Add ad data to Firestore
-        await addDoc(collection(db, 'ads'), {
-            ...data,
-            price: data.priceType === 'fixed' ? Number(data.price) : 0,
-            images: imageUrls,
-            userId: user.uid,
-            userDisplayName: user.displayName || user.email,
+        const adData = {
+          ...data,
+          price: data.priceType === 'fixed' ? Number(data.price) : 0,
+          images: imageUrls,
+          userId: user.uid,
+          userDisplayName: user.displayName || user.email,
+          status: 'active', // or 'pending' for review
+        };
+
+        if (isEditMode && adId) {
+          await updateDoc(doc(db, 'ads', adId), {
+            ...adData,
+            updatedAt: serverTimestamp(),
+          });
+          toast({ title: "آگهی با موفقیت ویرایش شد", description: "آگهی شما با موفقیت ویرایش شد."});
+        } else {
+          await addDoc(collection(db, 'ads'), {
+            ...adData,
             createdAt: serverTimestamp(),
-            status: 'active' // or 'pending' for review
-        });
+          });
+          toast({ title: "آگهی با موفقیت ثبت شد", description: "آگهی شما اکنون در لیست آگهی‌ها قابل مشاهده است."});
+        }
 
         setIsLoading(false);
         setCurrentStep(steps.length - 1);
-        toast({ title: "آگهی با موفقیت ثبت شد", description: "آگهی شما اکنون در لیست آگهی‌ها قابل مشاهده است."});
         router.push('/my-ads');
-    } catch (error) {
+    } catch (error: any) {
         setIsLoading(false);
         console.error("Error submitting ad:", error);
-        toast({ variant: 'destructive', title: 'خطا در ثبت آگهی', description: 'مشکلی پیش آمده، لطفا دوباره تلاش کنید.' });
+        let errorMessage = 'مشکلی در ثبت آگهی پیش آمده است.';
+        if (error.code === 'storage/unauthorized') {
+          errorMessage = 'شما مجوز کافی برای آپلود تصاویر ندارید.';
+        } else if (error.code === 'storage/canceled') {
+          errorMessage = 'آپلود تصاویر لغو شد.';
+        } else if (error.code === 'storage/unknown') {
+          errorMessage = 'مشکلی در آپلود تصاویر پیش آمده است. لطفا دوباره تلاش کنید.';
+        }
+        toast({ variant: 'destructive', title: 'خطا در ثبت آگهی', description: errorMessage });
     }
   };
 
@@ -180,7 +259,9 @@ export default function PostAdPage() {
             const reader = new FileReader();
             reader.onload = (e) => {
             if (e.target?.result) {
-                setUploadedImages(prev => [...prev, e.target!.result as string]);
+                const result = e.target.result as string;
+                setUploadedImages(prev => [...prev, result]);
+                form.setValue('images', [...uploadedImages, result]);
             }
             };
             reader.readAsDataURL(file);
@@ -190,7 +271,9 @@ export default function PostAdPage() {
 
 
   const removeImage = (index: number) => {
-    setUploadedImages(uploadedImages.filter((_, i) => i !== index));
+    const newUploadedImages = uploadedImages.filter((_, i) => i !== index);
+    setUploadedImages(newUploadedImages);
+    form.setValue('images', newUploadedImages);
   };
 
   const progress = ((currentStep) / (steps.length - 2)) * 100;
@@ -200,7 +283,7 @@ export default function PostAdPage() {
       <Card className="max-w-3xl mx-auto shadow-deep-lg">
         <CardHeader>
           <CardTitle className="text-center text-2xl font-headline flex items-center justify-center gap-2">
-            <steps[currentStep].icon className="w-6 h-6 text-primary" />
+            <StepIcon step={steps[currentStep]} />
             {steps[currentStep].title}
           </CardTitle>
           {currentStep < steps.length - 1 && (
@@ -402,12 +485,12 @@ export default function PostAdPage() {
                       {isLoading ? (
                         <>
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          در حال ثبت...
+                          {isEditMode ? 'در حال ویرایش...' : 'در حال ثبت...'}
                         </>
                       ) : (
                         <>
                           <Check className="mr-2 h-4 w-4" />
-                          ثبت نهایی آگهی
+                          {isEditMode ? 'ویرایش نهایی آگهی' : 'ثبت نهایی آگهی'}
                         </>
                       )}
                    </Button>

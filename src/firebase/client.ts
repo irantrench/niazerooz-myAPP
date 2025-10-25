@@ -8,9 +8,6 @@ import { firebaseConfig } from './config';
 
 // Initialize Firebase
 let app: FirebaseApp;
-let auth: Auth;
-let db: Firestore;
-let storage: FirebaseStorage;
 
 if (!getApps().length) {
   app = initializeApp(firebaseConfig);
@@ -18,8 +15,8 @@ if (!getApps().length) {
   app = getApp();
 }
 
-auth = getAuth(app);
-db = getFirestore(app);
-storage = getStorage(app);
+const auth: Auth = getAuth(app);
+const db: Firestore = getFirestore(app);
+const storage: FirebaseStorage = getStorage(app);
 
 export { app, auth, db, storage };

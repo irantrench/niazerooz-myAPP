@@ -1,0 +1,42 @@
+type User @table {
+  username: String!
+  email: String!
+  createdAt: Timestamp!
+  displayName: String
+  phoneNumber: String
+  profilePictureUrl: String
+  location: String
+}
+
+type Category @table {
+  name: String!
+  description: String
+}
+
+type Advertisement @table {
+  title: String!
+  description: String!
+  price: Float!
+  createdAt: Timestamp!
+  status: String!
+  imageUrls: [String]
+  location: String
+  condition: String
+  seller: User
+  category: Category
+}
+
+type Message @table {
+  content: String!
+  createdAt: Timestamp!
+  readAt: Timestamp
+  sender: User
+  receiver: User
+  advertisement: Advertisement
+}
+
+type Favorite @table(key: ["user", "advertisement"]) {
+  createdAt: Timestamp!
+  user: User!
+  advertisement: Advertisement!
+}

@@ -1,0 +1,701 @@
+extend type Advertisement {
+  """
+  ✨ List `Favorite` objects in a one-to-many relationship (where `Favorite`.`advertisement` is this object).
+  """
+  favorites_on_advertisement(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Favorite_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Favorite_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Favorite_Having
+  ): [Favorite!]! @fdc_generated(from: "Favorite.advertisement", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `Message` objects in a one-to-many relationship (where `Message`.`advertisement` is this object).
+  """
+  messages_on_advertisement(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Message_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Message_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Message_Having
+  ): [Message!]! @fdc_generated(from: "Message.advertisement", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `User` objects using `Favorite` as the join table (a `Favorite` object exists where its `advertisement` is this and its `user` is that).
+  """
+  users_via_Favorite(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Favorite_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Favorite_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Favorite_Having
+  ): [User!]! @fdc_generated(from: "Favorite", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "Advertisement", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `Advertisement` table.
+  """
+  _count: Int! @fdc_generated(from: "Advertisement.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Advertisement` table where the `categoryId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  categoryId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Advertisement.categoryId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Advertisement` table where the `condition` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  condition_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Advertisement.condition", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Advertisement` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Advertisement.createdAt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Advertisement` table where the `description` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  description_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Advertisement.description", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Advertisement` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  id_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Advertisement.id", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Advertisement` table where the `location` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  location_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Advertisement.location", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Advertisement` table where the `price` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  price_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Advertisement.price", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Advertisement` table where the `sellerId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  sellerId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Advertisement.sellerId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Advertisement` table where the `status` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  status_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Advertisement.status", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Advertisement` table where the `title` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  title_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Advertisement.title", purpose: QUERY_COUNT)
+  """
+  ✨ Sum the `price` field in the `Advertisement` table.
+  """
+  price_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "Advertisement.price", purpose: QUERY_SUM)
+  """
+  ✨ Average the `price` field in the `Advertisement` table.
+  """
+  price_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "Advertisement.price", purpose: QUERY_AVG)
+  """
+  ✨ Minimum of the `createdAt` field in the `Advertisement` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "Advertisement.createdAt", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `price` field in the `Advertisement` table.
+  """
+  price_min: Float @fdc_generated(from: "Advertisement.price", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `createdAt` field in the `Advertisement` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "Advertisement.createdAt", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `price` field in the `Advertisement` table.
+  """
+  price_max: Float @fdc_generated(from: "Advertisement.price", purpose: QUERY_MAX)
+}
+extend type Category {
+  """
+  ✨ List `Advertisement` objects in a one-to-many relationship (where `Advertisement`.`category` is this object).
+  """
+  advertisements_on_category(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Advertisement_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Advertisement_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Advertisement_Having
+  ): [Advertisement!]! @fdc_generated(from: "Advertisement.category", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "Category", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `Category` table.
+  """
+  _count: Int! @fdc_generated(from: "Category.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Category` table where the `description` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  description_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Category.description", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Category` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  id_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Category.id", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Category` table where the `name` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  name_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Category.name", purpose: QUERY_COUNT)
+}
+extend type Favorite {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "Favorite", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `Favorite` table.
+  """
+  _count: Int! @fdc_generated(from: "Favorite.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Favorite` table where the `advertisementId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  advertisementId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Favorite.advertisementId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Favorite` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Favorite.createdAt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Favorite` table where the `userId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  userId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Favorite.userId", purpose: QUERY_COUNT)
+  """
+  ✨ Minimum of the `createdAt` field in the `Favorite` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "Favorite.createdAt", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `createdAt` field in the `Favorite` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "Favorite.createdAt", purpose: QUERY_MAX)
+}
+extend type Message {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "Message", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `Message` table.
+  """
+  _count: Int! @fdc_generated(from: "Message.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Message` table where the `advertisementId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  advertisementId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Message.advertisementId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Message` table where the `content` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  content_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Message.content", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Message` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Message.createdAt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Message` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  id_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Message.id", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Message` table where the `readAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  readAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Message.readAt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Message` table where the `receiverId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  receiverId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Message.receiverId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Message` table where the `senderId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  senderId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Message.senderId", purpose: QUERY_COUNT)
+  """
+  ✨ Minimum of the `createdAt` field in the `Message` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "Message.createdAt", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `readAt` field in the `Message` table.
+  """
+  readAt_min: Timestamp @fdc_generated(from: "Message.readAt", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `createdAt` field in the `Message` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "Message.createdAt", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `readAt` field in the `Message` table.
+  """
+  readAt_max: Timestamp @fdc_generated(from: "Message.readAt", purpose: QUERY_MAX)
+}
+extend type User {
+  """
+  ✨ List `Advertisement` objects in a one-to-many relationship (where `Advertisement`.`seller` is this object).
+  """
+  advertisements_on_seller(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Advertisement_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Advertisement_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Advertisement_Having
+  ): [Advertisement!]! @fdc_generated(from: "Advertisement.seller", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `Favorite` objects in a one-to-many relationship (where `Favorite`.`user` is this object).
+  """
+  favorites_on_user(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Favorite_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Favorite_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Favorite_Having
+  ): [Favorite!]! @fdc_generated(from: "Favorite.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `Message` objects in a one-to-many relationship (where `Message`.`receiver` is this object).
+  """
+  messages_on_receiver(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Message_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Message_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Message_Having
+  ): [Message!]! @fdc_generated(from: "Message.receiver", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `Message` objects in a one-to-many relationship (where `Message`.`sender` is this object).
+  """
+  messages_on_sender(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Message_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Message_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Message_Having
+  ): [Message!]! @fdc_generated(from: "Message.sender", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `Advertisement` objects using `Favorite` as the join table (a `Favorite` object exists where its `user` is this and its `advertisement` is that).
+  """
+  advertisements_via_Favorite(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Favorite_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Favorite_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Favorite_Having
+  ): [Advertisement!]! @fdc_generated(from: "Favorite", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "User", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `User` table.
+  """
+  _count: Int! @fdc_generated(from: "User.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `User` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.createdAt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `User` table where the `displayName` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  displayName_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.displayName", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `User` table where the `email` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  email_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.email", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `User` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  id_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.id", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `User` table where the `location` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  location_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.location", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `User` table where the `phoneNumber` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  phoneNumber_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.phoneNumber", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `User` table where the `profilePictureUrl` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  profilePictureUrl_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.profilePictureUrl", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `User` table where the `username` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  username_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.username", purpose: QUERY_COUNT)
+  """
+  ✨ Minimum of the `createdAt` field in the `User` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "User.createdAt", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `createdAt` field in the `User` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "User.createdAt", purpose: QUERY_MAX)
+}

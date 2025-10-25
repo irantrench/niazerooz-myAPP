@@ -13,22 +13,26 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Heart, Filter, Loader2 } from 'lucide-react';
 import type { Ad } from '@/lib/types';
-import { collection, getDocs, orderBy, query, limit } from 'firebase/firestore';
+import { collection, getDocs, orderBy, query, limit, where } from 'firebase/firestore';
 import { db } from '@/firebase/client';
 import { useEffect, useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { Input } from '@/components/ui/input';
 
 export default function ListingsPage() {
   const [listings, setListings] = useState<Ad[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
   const { toast } = useToast();
 
   useEffect(() => {
     const fetchListings = async () => {
       setLoading(true);
       try {
-        const listingsRef = collection(db, "ads");
-        const q = query(listingsRef, orderBy("createdAt", "desc"), limit(20));
+        let q = query(collection(db, "ads"), orderBy("createdAt", "desc"), limit(20));
+        if (searchQuery) {
+          q = query(q, where('title', '>=', searchQuery), where('title', '<=', searchQuery + '\uf8ff'));
+        }
         const querySnapshot = await getDocs(q);
         const ads = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Ad));
         setListings(ads);
@@ -45,7 +49,7 @@ export default function ListingsPage() {
     };
 
     fetchListings();
-  }, [toast]);
+  }, [searchQuery, toast]);
   
   const getPriceDisplay = (listing: Ad) => {
     if (listing.priceType === 'free') return 'رایگان';
@@ -81,10 +85,15 @@ export default function ListingsPage() {
     <div className="container mx-auto py-8">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold font-headline text-foreground">آگهی‌های اخیر</h1>
-        <Button variant="outline" className="shadow-sm border-white/20 hover:bg-primary/10 hover:text-primary">
-          <Filter className="w-4 h-4 ml-2" />
-          فیلترها
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" className="shadow-sm border-white/20 hover:bg-primary/10 hover:text-primary">
+            <Filter className="w-4 h-4 ml-2" />
+            فیلترها
+          </Button>
+          <Button variant="outline" className="shadow-sm border-white/20 hover:bg-primary/10 hover:text-primary">
+            مرتب سازی
+          </Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

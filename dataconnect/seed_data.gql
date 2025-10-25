@@ -1,0 +1,3 @@
+mutation CreateSeedData @transaction @auth(level: PUBLIC, insecureReason: "This operation is for seeding the database with example data, and is safe to expose to the public.") {
+  #  Seed data mutations go here.
+}
