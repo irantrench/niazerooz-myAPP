@@ -1,4 +1,8 @@
-// This file will be renamed to src/firebase/config.ts
+
+// IMPORTANT: The values for this configuration are set in the .env file.
+// This is a client-side file, so these values will be exposed in the browser.
+// Make sure your Firestore security rules are set up correctly.
+
 export const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,

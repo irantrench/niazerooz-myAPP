@@ -31,7 +31,7 @@ import Link from "next/link";
 import { useAuth } from "@/context/auth-context";
 import { useEffect, useState } from "react";
 import { collection, query, where, getDocs, deleteDoc, doc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { db } from "@/firebase/client";
 import type { Ad } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
 

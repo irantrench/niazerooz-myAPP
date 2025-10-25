@@ -1,5 +1,4 @@
-'use client';
-
+// This file is deprecated and will be removed. Please use src/firebase/client.ts
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';

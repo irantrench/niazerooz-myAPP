@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/button';
 import { Heart, Filter, Loader2 } from 'lucide-react';
 import type { Ad } from '@/lib/types';
 import { collection, getDocs, orderBy, query, limit } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { db } from '@/firebase/client';
 import { useEffect, useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 
