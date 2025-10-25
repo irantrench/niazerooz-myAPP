@@ -119,19 +119,16 @@ export default function PostAdPage() {
       }
     };
 
-    if (!authLoading) {
+    if (!authLoading && !user) {
+        toast({ title: "نیاز به ورود", description: "برای ثبت آگهی، لطفا ابتدا وارد حساب کاربری خود شوید.", variant: "destructive" });
+        router.push('/login');
+    } else if (!authLoading && user) {
       fetchAdData();
     }
   }, [adId, user, authLoading, form, router, toast]);
 
-  if (authLoading) {
+  if (authLoading || (!user && !adId)) {
     return <div className="flex justify-center items-center h-screen"><Loader2 className="w-12 h-12 animate-spin text-primary" /></div>;
-  }
-
-  if (!user) {
-    toast({ title: "نیاز به ورود", description: "برای ثبت آگهی، لطفا ابتدا وارد حساب کاربری خود شوید.", variant: "destructive" });
-    router.push('/login');
-    return null;
   }
 
   const handleCategorySelect = (categoryName: string) => {

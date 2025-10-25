@@ -30,10 +30,21 @@ import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { useAuth } from "@/context/auth-context";
 import { useEffect, useState } from "react";
-import { collection, query, where, getDocs, deleteDoc, doc } from "firebase/firestore";
+import { collection, query, where, getDocs, deleteDoc, doc, orderBy } from "firebase/firestore";
 import { db } from "@/firebase/client";
 import type { Ad } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 export default function MyAdsPage() {
     const { user, loading: authLoading } = useAuth();
@@ -68,8 +79,6 @@ export default function MyAdsPage() {
     }, [user, authLoading, toast]);
 
     const handleDelete = async (adId: string) => {
-        if(!confirm('آیا از حذف این آگهی اطمینان دارید؟ این عمل غیرقابل بازگشت است.')) return;
-
         try {
             await deleteDoc(doc(db, "ads", adId));
             setAds(prevAds => prevAds.filter(ad => ad.id !== adId));
@@ -188,13 +197,28 @@ export default function MyAdsPage() {
                             ویرایش
                           </Link>
                         </DropdownMenuItem>
-                        <DropdownMenuItem 
-                          className="text-red-500 focus:text-red-500 focus:bg-red-50 dark:focus:bg-red-900/40"
-                          onClick={() => ad.id && handleDelete(ad.id)}
-                        >
-                            <Trash2 className="h-4 w-4 ml-2"/>
-                            حذف
-                        </DropdownMenuItem>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <button className="relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 w-full text-red-500 focus:text-red-500 focus:bg-red-50 dark:focus:bg-red-900/40">
+                              <Trash2 className="h-4 w-4"/>
+                              حذف
+                            </button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>آیا کاملا مطمئن هستید؟</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                این عمل غیرقابل بازگشت است. این آگهی برای همیشه حذف خواهد شد.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>انصراف</AlertDialogCancel>
+                              <AlertDialogAction onClick={() => ad.id && handleDelete(ad.id)}>
+                                بله، حذف کن
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
