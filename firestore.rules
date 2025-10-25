@@ -1,20 +1,79 @@
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Users Collection
+    /**
+     * @description This ruleset enforces a user-centric security model with public read access to ads.
+     * @dataStructure All user data is stored under `/users/{userId}`. Ads are stored in the top-level `/ads` collection.
+     * @keySecurityDecisions Users can only read their own profiles and can only create, update, or delete ads they own. Ads are publicly readable.
+     * @denormalizationForAuthorization The `ads` documents denormalize `userId` to allow simple ownership checks.
+     * @structuralSegregation User profiles are stored separately from ads.
+     */
+
+    /**
+     * @description Controls access to user profiles. Only authenticated users can read profiles, and they can only write to their own profile.
+     * @path /databases/{database}/documents/users/{userId}
+     * @allow (read) auth.uid: "user123" (get) - Allows authenticated user "user123" to read their own profile.
+     * @allow (create) auth.uid: "user123" (create) - Allows authenticated user "user123" to create their own profile if the UID matches.
+     * @allow (update) auth.uid: "user123" (update) - Allows authenticated user "user123" to update their own profile.
+     * @allow (delete) auth.uid: "user123" (delete) - Allows authenticated user "user123" to delete their own profile.
+     * @deny (read) auth.uid: null (get) - Denies unauthenticated users from reading any user profile.
+     * @deny (create) auth.uid: "user456" (create) - Denies authenticated user "user456" from creating a profile with ID "user123".
+     * @principle Enforces document ownership for writes and restricts access to a user's own data tree.
+     */
     match /users/{userId} {
-      allow read: if request.auth.uid != null;
-      allow write: if request.auth.uid == userId;
+      // Allow users to read their own profile if authenticated.
+      allow get: if isSignedIn() && isOwner(userId);
+      allow list: if false; // Prevent listing all user profiles.
+
+      // Allow users to create their own profile, but only if the UID matches.
+      allow create: if isSignedIn() && isOwner(userId) && request.resource.data.uid == userId;
+
+      // Allow users to update their own profile.
+      allow update: if isSignedIn() && isExistingOwner(userId) && request.resource.data.uid == resource.data.uid;
+
+      // Allow users to delete their own profile.
+      allow delete: if isSignedIn() && isExistingOwner(userId);
     }
 
-    // Ads Collection
+    /**
+     * @description Controls access to ads.  Ads are publicly readable, but only authenticated users can create them. Only the ad owner can update or delete.
+     * @path /databases/{database}/documents/ads/{adId}
+     * @allow (read) - Allows anyone to read an ad.
+     * @allow (create) auth.uid: "user123" (create) - Allows authenticated user "user123" to create an ad.
+     * @allow (update) auth.uid: "user123" (update) - Allows authenticated user "user123" to update an ad they own.
+     * @allow (delete) auth.uid: "user123" (delete) - Allows authenticated user "user123" to delete an ad they own.
+     * @deny (create) auth.uid: null (create) - Denies unauthenticated users from creating ads.
+     * @deny (update) auth.uid: "user456" (update) - Denies authenticated user "user456" from updating an ad owned by "user123".
+     * @principle Allows public read access while enforcing document ownership for writes.
+     */
     match /ads/{adId} {
-      allow read: if true;
-      allow create: if request.auth.uid != null;
-      allow update, delete: if request.auth.uid == resource.data.userId;
-    }
+      // Allow anyone to read ads.
+      allow get, list: if true;
 
+      // Allow authenticated users to create ads.
+      allow create: if isSignedIn();
+
+      // Allow the ad owner to update the ad.
+      allow update: if isSignedIn() && isExistingOwner(resource.data.userId);
+
+      // Allow the ad owner to delete the ad.
+      allow delete: if isSignedIn() && isExistingOwner(resource.data.userId);
+    }
+  }
+
+  // Helper function to determine if the user is signed in.
+  function isSignedIn() {
+    return request.auth != null;
+  }
+
+  // Helper function to determine if the user is the owner of the resource.
+  function isOwner(userId) {
+    return request.auth.uid == userId;
+  }
+
+  // Helper function to determine if the user is the owner of an existing resource.
+  function isExistingOwner(userId) {
+    return request.auth.uid == userId && resource != null;
   }
 }

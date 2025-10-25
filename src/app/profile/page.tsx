@@ -80,7 +80,7 @@ export default function ProfilePage() {
             <div className="bg-card p-4 rounded-xl shadow-sm border mb-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                    <Image src={user.photoURL || '/default-avatar.png'} alt={user.displayName || 'User'} width={48} height={48} className="rounded-full bg-gray-800" />
+                    <Image src={user.photoURL || 'https://picsum.photos/seed/avatar/48/48'} alt={user.displayName || 'User'} width={48} height={48} className="rounded-full bg-gray-800" />
                   <div>
                     <p className="font-semibold text-foreground">{user.displayName || user.email}</p>
                     <p className="text-sm text-muted-foreground" dir="ltr">{user.phoneNumber || 'شماره تلفن ثبت نشده'}</p>
@@ -107,8 +107,8 @@ export default function ProfilePage() {
         {/* Menu List */}
         <div className="bg-card rounded-xl shadow-lg border">
             {menuItems.map((item, index) => (
-                <Link href={item.href} key={index} className={!user && item.href.startsWith('/my') ? 'pointer-events-none' : ''}>
-                    <div className={cn("flex items-center justify-between p-4 group", !user && item.href.startsWith('/my') && 'opacity-50 cursor-not-allowed')}>
+                <Link href={item.href} key={index} className={!user && (item.href.startsWith('/my-ads') || item.href.startsWith('/profile')) ? 'pointer-events-none' : ''}>
+                    <div className={cn("flex items-center justify-between p-4 group", !user && (item.href.startsWith('/my-ads') || item.href.startsWith('/profile')) && 'opacity-50 cursor-not-allowed')}>
                         <div className="flex items-center gap-4">
                         <item.icon className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
                         <span className="font-semibold text-foreground group-hover:text-primary transition-colors">

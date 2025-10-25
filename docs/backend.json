@@ -1,38 +1,49 @@
 {
-    "collections": {
-        "users": {
-            "schema": {
-                "uid": "string",
-                "displayName": "string",
-                "email": "string",
-                "photoURL": "string",
-                "createdAt": "timestamp"
-            },
-            "rules": {
-                "read": "auth.uid != null",
-                "write": "auth.uid == resource.data.uid"
-            }
-        },
-        "ads": {
-            "schema": {
-                "title": "string",
-                "description": "string",
-                "priceType": "string",
-                "price": "number",
-                "category": "string",
-                "location": "string",
-                "images": "array",
-                "userId": "string",
-                "userDisplayName": "string",
-                "createdAt": "timestamp",
-                "status": "string"
-            },
-            "rules": {
-                "read": "true",
-                "create": "request.auth.uid != null",
-                "update": "request.auth.uid == resource.data.userId",
-                "delete": "request.auth.uid == resource.data.userId"
-            }
-        }
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Represents a user's profile information.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "The user's unique ID." },
+        "email": { "type": "string", "format": "email", "description": "The user's email address." },
+        "displayName": { "type": "string", "description": "The user's display name." },
+        "photoURL": { "type": "string", "format": "uri", "description": "URL of the user's profile picture." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "The timestamp when the user profile was created." }
+      },
+      "required": ["uid", "email", "createdAt"]
+    },
+    "Ad": {
+      "title": "Advertisement",
+      "description": "Represents an ad listing posted by a user.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "description": "The title of the ad." },
+        "description": { "type": "string", "description": "The detailed description of the ad." },
+        "priceType": { "type": "string", "enum": ["fixed", "negotiable", "free"], "description": "The pricing model for the ad." },
+        "price": { "type": "number", "description": "The price of the item, if fixed." },
+        "category": { "type": "string", "description": "The category of the ad." },
+        "location": { "type": "string", "description": "The location associated with the ad." },
+        "images": { "type": "array", "items": { "type": "string", "format": "uri" }, "description": "A list of image URLs for the ad." },
+        "userId": { "type": "string", "description": "The UID of the user who posted the ad." },
+        "userDisplayName": { "type": "string", "description": "The display name of the user who posted the ad." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "The timestamp when the ad was created." },
+        "status": { "type": "string", "enum": ["active", "pending", "expired"], "description": "The current status of the ad." }
+      },
+      "required": ["title", "description", "priceType", "category", "userId", "createdAt", "status"]
     }
+  },
+  "auth": {
+    "providers": ["password", "google.com"]
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Stores public profile information for each user."
+    },
+    "/ads/{adId}": {
+      "schema": { "$ref": "#/entities/Ad" },
+      "description": "Stores all the advertisement listings."
+    }
+  }
 }

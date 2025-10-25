@@ -26,5 +26,5 @@ export interface UserProfile {
   email: string | null;
   displayName: string | null;
   photoURL: string | null;
-  // any other fields you want to store
+  createdAt?: Timestamp;
 }

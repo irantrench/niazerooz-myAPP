@@ -7,7 +7,6 @@ import { auth, db } from '@/lib/firebase';
 import type { UserProfile } from '@/lib/types';
 import { Loader2 } from 'lucide-react';
 
-
 interface AuthContextType {
   user: User | null;
   userProfile: UserProfile | null;
@@ -81,7 +80,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         uid: userCredential.user.uid,
         displayName: fullName,
         email: email,
-        photoURL: null,
+        photoURL: userCredential.user.photoURL,
       };
 
       await setDoc(doc(db, 'users', userCredential.user.uid), {
@@ -127,7 +126,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
   
   // A loading screen for the initial auth state check
-  if (loading) {
+  if (loading && !user) {
       return (
           <div className="w-full h-screen flex justify-center items-center bg-background">
               <Loader2 className="w-16 h-16 animate-spin text-primary" />
