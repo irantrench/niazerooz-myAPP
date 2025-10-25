@@ -96,7 +96,7 @@ export default function ListingsPage() {
           <Card key={listing.id} className="bg-card overflow-hidden group transition-all duration-300 hover:shadow-deep-lg hover:-translate-y-1 gradient-border animate-subtle-float" style={{animationDelay: `${index * 100}ms`}}>
             <CardHeader className="p-0">
               <div className="relative overflow-hidden">
-                 <Link href="#">
+                 <Link href={`/listings/${listing.id}`}>
                     <Image
                       src={listing.images?.[0] || 'https://picsum.photos/seed/placeholder/800/600'}
                       alt={listing.title}
@@ -115,7 +115,7 @@ export default function ListingsPage() {
             <CardContent className="p-4 space-y-2">
                 <p className="text-sm text-muted-foreground">{listing.location || 'نامشخص'}</p>
                 <CardTitle className="text-base font-semibold h-12 leading-6">
-                    <Link href="#" className="hover:text-primary transition-colors">
+                    <Link href={`/listings/${listing.id}`} className="hover:text-primary transition-colors">
                         {listing.title}
                     </Link>
                 </CardTitle>

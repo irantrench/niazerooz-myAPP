@@ -57,11 +57,12 @@ export default function ProfilePage() {
         <div className="mb-6 rounded-lg overflow-hidden shadow-lg hover:shadow-primary/30 transition-shadow duration-300">
            <Link href="/services/vip">
               <Image
-                src="https://www.niazerooz.com/images/Personal/Banner.jpg"
+                src="https://picsum.photos/seed/business-banner/1200/200"
                 alt="اعطای نمایندگی انحصاری"
                 width={1200}
                 height={200}
                 className="object-cover w-full"
+                data-ai-hint="business banner"
               />
            </Link>
         </div>

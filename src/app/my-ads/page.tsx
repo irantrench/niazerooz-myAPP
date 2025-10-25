@@ -156,16 +156,20 @@ export default function MyAdsPage() {
               {ads.length > 0 ? ads.map((ad) => (
                 <TableRow key={ad.id}>
                   <TableCell className="hidden sm:table-cell">
-                    <Image
-                      alt={ad.title}
-                      className="aspect-square rounded-md object-cover"
-                      height="64"
-                      src={ad.images?.[0] || "https://picsum.photos/seed/ad/64/64"}
-                      width="64"
-                      data-ai-hint="ad image"
-                    />
+                    <Link href={`/listings/${ad.id}`}>
+                      <Image
+                        alt={ad.title}
+                        className="aspect-square rounded-md object-cover"
+                        height="64"
+                        src={ad.images?.[0] || "https://picsum.photos/seed/ad/64/64"}
+                        width="64"
+                        data-ai-hint="ad image"
+                      />
+                    </Link>
                   </TableCell>
-                  <TableCell className="font-medium">{ad.title}</TableCell>
+                  <TableCell className="font-medium">
+                     <Link href={`/listings/${ad.id}`} className="hover:text-primary">{ad.title}</Link>
+                  </TableCell>
                   <TableCell>
                     <Badge variant={ad.status === "active" ? "default" : ad.status === "expired" ? "destructive" : "secondary"}>
                       {ad.status === 'active' ? 'فعال' : ad.status === 'pending' ? 'در انتظار تایید' : 'منقضی شده'}
