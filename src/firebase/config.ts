@@ -1,13 +1,11 @@
 
-// IMPORTANT: The values for this configuration are set in the .env file.
-// This is a client-side file, so these values will be exposed in the browser.
-// Make sure your Firestore security rules are set up correctly.
+// IMPORTANT: These values are taken directly from your Firebase project settings.
 
 export const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  apiKey: "AIzaSyDGvMjhn1s94PH3NkiuVTWUP6st-BFwc5Y",
+  authDomain: "studio-wtjb2.firebaseapp.com",
+  projectId: "studio-wtjb2",
+  storageBucket: "studio-wtjb2.appspot.com",
+  messagingSenderId: "718317641808",
+  appId: "1:718317641808:web:9eab1693317af29e0cb155"
 };
