@@ -3,9 +3,9 @@
 
 export const firebaseConfig = {
   apiKey: "AIzaSyDGvMjhn1s94PH3NkiuVTWUP6st-BFwc5Y",
-  authDomain: "studio-wtjb2.firebaseapp.com",
+  authDomain: "niazerooz-project.firebaseapp.com",
   projectId: "studio-wtjb2",
-  storageBucket: "studio-wtjb2.appspot.com",
+  storageBucket: "niazerooz-project.appspot.com",
   messagingSenderId: "718317641808",
   appId: "1:718317641808:web:9eab1693317af29e0cb155"
 };
