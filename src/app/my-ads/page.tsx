@@ -166,7 +166,7 @@ export default function MyAdsPage() {
                     {ad.priceType === 'fixed' ? `${Number(ad.price).toLocaleString('fa-IR')} تومان` : ad.priceType === 'negotiable' ? 'توافقی' : 'رایگان'}
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
-                    {new Date(ad.createdAt.seconds * 1000).toLocaleDateString('fa-IR')}
+                    {ad.createdAt?.seconds ? new Date(ad.createdAt.seconds * 1000).toLocaleDateString('fa-IR') : ''}
                   </TableCell>
                   <TableCell>
                     <DropdownMenu>
@@ -188,7 +188,7 @@ export default function MyAdsPage() {
                         </DropdownMenuItem>
                         <DropdownMenuItem 
                           className="text-red-500 focus:text-red-500 focus:bg-red-50 dark:focus:bg-red-900/40"
-                          onClick={() => handleDelete(ad.id)}
+                          onClick={() => ad.id && handleDelete(ad.id)}
                         >
                             <Trash2 className="h-4 w-4 ml-2"/>
                             حذف

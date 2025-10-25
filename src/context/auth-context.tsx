@@ -42,8 +42,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 displayName: user.displayName,
                 email: user.email,
                 photoURL: user.photoURL,
+                createdAt: serverTimestamp(),
             };
-            await setDoc(userDocRef, { ...newUserProfile, createdAt: serverTimestamp() });
+            await setDoc(userDocRef, newUserProfile);
             setUserProfile(newUserProfile);
         }
       } else {
@@ -87,8 +88,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           ...newUserProfile,
           createdAt: serverTimestamp()
       });
-      setUser(userCredential.user);
-      setUserProfile(newUserProfile);
+      // setUser(userCredential.user);
+      // setUserProfile(newUserProfile);
 
     } catch (e: any) {
       setError(e.message);
@@ -126,7 +127,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
   
   // A loading screen for the initial auth state check
-  if (loading && typeof window !== 'undefined') {
+  if (loading) {
       return (
           <div className="w-full h-screen flex justify-center items-center bg-background">
               <Loader2 className="w-16 h-16 animate-spin text-primary" />
