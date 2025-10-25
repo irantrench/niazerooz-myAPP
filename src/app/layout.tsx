@@ -4,6 +4,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import BottomNav from '@/components/bottom-nav';
 import { AuthProvider } from '@/context/auth-context';
+import { FirebaseErrorListener } from '@/components/FirebaseErrorListener';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -34,6 +35,7 @@ export default function RootLayout({
     <html lang="fa" dir="rtl" className={`${poppins.variable} ${ptSans.variable} scroll-smooth`}>
       <body className="font-body bg-background antialiased aurora-background">
         <AuthProvider>
+          <FirebaseErrorListener />
           <div className="flex flex-col min-h-screen">
             <main className="flex-grow pb-20">
               {children}

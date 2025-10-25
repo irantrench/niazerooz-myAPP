@@ -30,6 +30,8 @@ import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { db, storage } from '@/firebase/client';
 import type { Ad } from '@/lib/types';
 import StepIcon from '@/components/StepIcon';
+import { errorEmitter } from '@/firebase/error-emitter';
+import { FirestorePermissionError } from '@/firebase/errors';
 
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
@@ -168,56 +170,73 @@ export default function PostAdPage() {
   
   const onSubmit = async (data: AdFormValues) => {
     if (!user) {
-        toast({ variant: 'destructive', title: 'خطا', description: 'برای ثبت آگهی باید وارد شده باشید.' });
-        return;
+      toast({ variant: 'destructive', title: 'خطا', description: 'برای ثبت آگهی باید وارد شده باشید.' });
+      return;
     }
     setIsLoading(true);
-    
+
     try {
-        const imageUrls: string[] = [];
-        // Upload new images to Firebase Storage
-        for (const image of uploadedImages) {
-           // check if image is a data url, if not it's an existing image url
-            if(image.startsWith('data:')){
-                const imageName = `${user.uid}-${Date.now()}-${Math.random()}`;
-                const storageRef = ref(storage, `ads/${imageName}`);
-                const uploadResult = await uploadString(storageRef, image, 'data_url');
-                const downloadUrl = await getDownloadURL(uploadResult.ref);
-                imageUrls.push(downloadUrl);
-            } else {
-                imageUrls.push(image);
-            }
-        }
-
-        const adData = {
-          ...data,
-          price: data.priceType === 'fixed' ? Number(data.price) : 0,
-          images: imageUrls,
-          userId: user.uid,
-          userDisplayName: user.displayName || user.email,
-          status: 'active', // or 'pending' for review
-        };
-
-        if (isEditMode && adId) {
-          await updateDoc(doc(db, 'ads', adId), {
-            ...adData,
-            updatedAt: serverTimestamp(),
-          });
-          toast({ title: "آگهی با موفقیت ویرایش شد", description: "آگهی شما با موفقیت ویرایش شد."});
+      const imageUrls: string[] = [];
+      for (const image of uploadedImages) {
+        if (image.startsWith('data:')) {
+          const imageName = `${user.uid}-${Date.now()}-${Math.random()}`;
+          const storageRef = ref(storage, `ads/${imageName}`);
+          const uploadResult = await uploadString(storageRef, image, 'data_url');
+          const downloadUrl = await getDownloadURL(uploadResult.ref);
+          imageUrls.push(downloadUrl);
         } else {
-          await addDoc(collection(db, 'ads'), {
-            ...adData,
-            createdAt: serverTimestamp(),
-          });
-          toast({ title: "آگهی با موفقیت ثبت شد", description: "آگهی شما اکنون در لیست آگهی‌ها قابل مشاهده است."});
+          imageUrls.push(image);
         }
+      }
 
-        setIsLoading(false);
-        setCurrentStep(steps.length - 1);
-        router.push('/my-ads');
+      const adData = {
+        ...data,
+        price: data.priceType === 'fixed' ? Number(data.price) : 0,
+        images: imageUrls,
+        userId: user.uid,
+        userDisplayName: user.displayName || user.email,
+        status: 'active' as 'active',
+      };
+
+      if (isEditMode && adId) {
+        const adDocRef = doc(db, 'ads', adId);
+        updateDoc(adDocRef, {
+          ...adData,
+          updatedAt: serverTimestamp(),
+        }).catch(serverError => {
+            const permissionError = new FirestorePermissionError({
+              path: adDocRef.path,
+              operation: 'update',
+              requestResourceData: adData,
+            });
+            errorEmitter.emit('permission-error', permissionError);
+        });
+        
+        toast({ title: "آگهی با موفقیت ویرایش شد", description: "آگهی شما با موفقیت ویرایش شد."});
+      } else {
+        const collectionRef = collection(db, 'ads');
+        addDoc(collectionRef, {
+          ...adData,
+          createdAt: serverTimestamp(),
+        }).catch(serverError => {
+          const permissionError = new FirestorePermissionError({
+            path: collectionRef.path,
+            operation: 'create',
+            requestResourceData: adData,
+          });
+          errorEmitter.emit('permission-error', permissionError);
+        });
+
+        toast({ title: "آگهی با موفقیت ثبت شد", description: "آگهی شما اکنون در لیست آگهی‌ها قابل مشاهده است."});
+      }
+
+      setIsLoading(false);
+      setCurrentStep(steps.length - 1);
+      // Removed router.push to stay on the success page.
+      // router.push('/my-ads');
+
     } catch (error: any) {
         setIsLoading(false);
-        console.error("Error submitting ad:", error);
         let errorMessage = 'مشکلی در ثبت آگهی پیش آمده است.';
         if (error.code === 'storage/unauthorized') {
           errorMessage = 'شما مجوز کافی برای آپلود تصاویر ندارید.';
@@ -229,6 +248,7 @@ export default function PostAdPage() {
         toast({ variant: 'destructive', title: 'خطا در ثبت آگهی', description: errorMessage });
     }
   };
+
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
