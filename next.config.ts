@@ -59,6 +59,11 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'studio-wtjb2.appspot.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+        pathname: '/a/**',
       }
     ],
   },

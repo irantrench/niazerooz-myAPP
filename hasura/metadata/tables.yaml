@@ -1,0 +1,135 @@
+- table:
+    schema: public
+    name: users
+  configuration:
+    custom_root_fields:
+      select: users
+      select_by_pk: user
+      select_aggregate: users_aggregate
+      insert: createUser
+      insert_one: createOneUser
+      update: updateUsers
+      update_by_pk: updateUser
+      delete: deleteUsers
+      delete_by_pk: deleteUser
+    custom_column_names: {}
+  relationships:
+    - name: profile
+      using:
+        foreign_key_constraint_on:
+          column: user_id
+          table:
+            schema: public
+            name: profiles
+    - name: listings
+      using:
+        foreign_key_constraint_on:
+          column: user_id
+          table:
+            schema: public
+            name: listings
+
+- table:
+    schema: public
+    name: listings
+  configuration:
+    custom_root_fields:
+      select: listings
+      select_by_pk: listing
+      select_aggregate: listings_aggregate
+      insert: createListing
+      insert_one: createOneListing
+      update: updateListings
+      update_by_pk: updateListing
+      delete: deleteListings
+      delete_by_pk: deleteListing
+  relationships:
+    - name: user
+      using:
+        foreign_key_constraint_on: user_id
+    - name: category
+      using:
+        foreign_key_constraint_on: category_id
+    - name: images
+      using:
+        foreign_key_constraint_on:
+          column: listing_id
+          table:
+            schema: public
+            name: listing_images
+
+- table:
+    schema: public
+    name: categories
+  configuration:
+    custom_root_fields:
+      select: categories
+      select_by_pk: category
+    custom_column_names: {}
+  relationships:
+    - name: listings
+      using:
+        foreign_key_constraint_on:
+          column: category_id
+          table:
+            schema: public
+            name: listings
+
+- table:
+    schema: public
+    name: messages
+  configuration:
+    custom_root_fields:
+      select: messages
+      select_by_pk: message
+      insert: createMessage
+      insert_one: createOneMessage
+  relationships:
+    - name: sender
+      using:
+        foreign_key_constraint_on: sender_id
+    - name: receiver
+      using:
+        foreign_key_constraint_on: receiver_id
+    - name: listing
+      using:
+        foreign_key_constraint_on: listing_id
+
+- table:
+    schema: public
+    name: transactions
+  configuration:
+    custom_root_fields:
+      select: transactions
+      select_by_pk: transaction
+      insert: createTransaction
+      insert_one: createOneTransaction
+  relationships:
+    - name: user
+      using:
+        foreign_key_constraint_on: user_id
+    - name: listing
+      using:
+        foreign_key_constraint_on: listing_id
+
+- table:
+    schema: public
+    name: reports
+  configuration:
+    custom_root_fields:
+      select: reports
+      select_by_pk: report
+      insert: createReport
+      insert_one: createOneReport
+      update: updateReports
+      update_by_pk: updateReport
+  relationships:
+    - name: user
+      using:
+        foreign_key_constraint_on: user_id
+    - name: listing
+      using:
+        foreign_key_constraint_on: listing_id
+    - name: moderator
+      using:
+        foreign_key_constraint_on: moderator_id

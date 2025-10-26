@@ -1,0 +1,110 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String        @id @default(uuid())
+  email             String        @unique
+  phone             String?       @unique
+  name              String?
+  role              String        @default("user")
+  status            String        @default("active")
+  createdAt         DateTime      @default(now())
+  listings          Listing[]
+  profile           Profile?
+  sentMessages      Message[]     @relation("SentMessages")
+  receivedMessages  Message[]     @relation("ReceivedMessages")
+  transactions      Transaction[]
+  reports          Report[]      @relation("ReportedBy")
+  moderatedReports Report[]      @relation("ModeratedBy")
+}
+
+model Profile {
+  id       String @id @default(uuid())
+  user     User   @relation(fields: [userId], references: [id])
+  userId   String @unique
+  bio      String?
+  avatar   String?
+  city     String?
+}
+
+model Category {
+  id        String    @id @default(uuid())
+  name      String
+  parentId  String?   
+  listings  Listing[]
+}
+
+model Listing {
+  id          String         @id @default(uuid())
+  title       String
+  description String?
+  price       Float?
+  currency    String?        @default("IRR")
+  user        User           @relation(fields: [userId], references: [id])
+  userId      String
+  category    Category?      @relation(fields: [categoryId], references: [id])
+  categoryId  String?
+  city        String?
+  lat         Float?
+  lng         Float?
+  status      String         @default("active")
+  isVip       Boolean        @default(false)
+  createdAt   DateTime       @default(now())
+  images      ListingImage[]
+}
+
+model ListingImage {
+  id         String   @id @default(uuid())
+  listing    Listing  @relation(fields: [listingId], references: [id])
+  listingId  String
+  url        String
+  order      Int      @default(0)
+}
+
+model Message {
+  id          String   @id @default(uuid())
+  content     String
+  sender      User     @relation("SentMessages", fields: [senderId], references: [id])
+  senderId    String
+  receiver    User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  receiverId  String
+  listing     Listing? @relation(fields: [listingId], references: [id])
+  listingId   String?
+  createdAt   DateTime @default(now())
+  readAt      DateTime?
+}
+
+model Transaction {
+  id          String   @id @default(uuid())
+  amount      Float
+  currency    String   @default("IRR")
+  type        String   // vip, feature, promote
+  status      String   @default("pending")
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
+  listing     Listing? @relation(fields: [listingId], references: [id])
+  listingId   String?
+  createdAt   DateTime @default(now())
+  paidAt      DateTime?
+}
+
+model Report {
+  id          String   @id @default(uuid())
+  type        String   // spam, offensive, fake, other
+  description String?
+  user        User     @relation("ReportedBy", fields: [userId], references: [id])
+  userId      String
+  listing     Listing  @relation(fields: [listingId], references: [id])
+  listingId   String
+  status      String   @default("pending")
+  createdAt   DateTime @default(now())
+  resolvedAt  DateTime?
+  moderator   User?    @relation("ModeratedBy", fields: [moderatorId], references: [id])
+  moderatorId String?
+}
